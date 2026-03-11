@@ -1,0 +1,84 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs and DBs
+*.log
+*.sqlite3
+*.db
+chroma_db/
+.vscode/
+.idea/
+
+# Temporary and Cache
+.pytest_cache/
+diff.txt
+pytest_errors*.txt
+pytest_output.txt
+.cache/
+
+# Executable Data Outputs
+arth-executive/data/outputs/
+arth-executive/data/temp_scripts/
+arth-executive/test_image_resp.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.json
+**/node_modules/
+.env*
+
+# ==========================================
+# IGNORANDO OUTROS PROJETOS (DEPLOY ISOLADO)
+# ==========================================
+
+# Dashboards Front-End (Já estão na Vercel)
+artificiall-growth/
+
+# Outros projetos avulsos na raiz local
+Gean Clone/
+Gerador de Leads/
+agente-juridico-breviliere/
+chefia/
+meu-projeto/
+
+# Ignorar as outras Squads (Para não subir código de outros clientes/projetos)
+squads/arth-executive-squad-v1/
+squads/elite-dev-squad/
+squads/juridico-squad/
