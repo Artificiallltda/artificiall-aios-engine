@@ -67,7 +67,7 @@ async def arth_analyst_processor(state: dict) -> dict:
     )
     
     if rich_content:
-        instruction += f"\n\n--- CONTEÚDO PARA O DOCUMENTO ---\n{rich_content[:2000]}\n--- FIM DO CONTEÚDO ---"
+        instruction += f"\n\n--- CONTEÚDO PARA O DOCUMENTO ---\n{rich_content[:15000]}\n--- FIM DO CONTEÚDO ---"
     
     if has_research:
         instruction += "\n\n💡 DETECTEI DADOS DE PESQUISA RECENTES. Incorpore-os integralmente no documento."

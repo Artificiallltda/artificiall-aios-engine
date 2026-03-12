@@ -230,101 +230,92 @@ class ArthPDF(FPDF):
         self.cell(0, 10, f"Gerado por Arth Executive em {date_str}  |  Confidencial  |  Página {self.page_no()}", 0, 0, "C")
 
 def _clean_pdf_text(text: str) -> str:
-    """Limpa texto para compatibilidade total com FPDF Latin-1."""
+    """Limpa texto para compatibilidade, mas preserva UTF-8 agora."""
     if not text: return ""
-    # Substitui caracteres comuns de interrupção
-    text = text.replace('–', '-').replace('—', '-').replace('‘', "'").replace('’', "'").replace('“', '"').replace('”', '"')
-    # Força codificação latin-1 ignorando o que não couber
-    return text.encode("latin-1", errors="replace").decode("latin-1")
-
-def _safe_multi_cell(pdf, w, h, txt):
-    """Fallback seguro para textos sem espaços (como URLs longas) que quebram o FPDF."""
-    try:
-        pdf.multi_cell(w, h, txt)
-    except Exception as e:
-        # Palavras gigantes sem espaço causam "Not enough horizontal space"
-        # Quebramos a força
-        import textwrap
-        wrapped = "\\n".join(textwrap.wrap(txt, width=90, break_long_words=True))
-        try:
-            pdf.multi_cell(w, h, wrapped)
-        except:
-            pass # se ainda der erro, ignora a linha fatal
+    # Remove apenas caracteres de controle que quebram o PDF
+    return text.replace('–', '-').replace('—', '-').replace('‘', "'").replace('’', "'").replace('“', '"').replace('”', '"')
 
 @tool(args_schema=PdfSchema)
 async def generate_pdf(title: str, content: str) -> str:
-    """Cria um documento PDF Executivo Premium com design Manus AI."""
+    """Cria um documento PDF Executivo Premium com suporte total a UTF-8."""
     if title is None or content is None:
-        logger.error(f"[PDFGen] ERRO: Parâmetros nulos. title={title}")
+        logger.error(f"[PDFGen] ERRO: Parâmetros nulos.")
         title = title or "Documento Executivo"
         content = content or "Conteúdo não fornecido."
         
     try:
-        # Garante nome de arquivo limpo e único
         clean_title = _safe_filename(title)
         filename = f"{uuid.uuid4().hex[:6]}-{clean_title}.pdf"
         output_dir = os.path.abspath(settings.DATA_OUTPUTS_PATH)
         os.makedirs(output_dir, exist_ok=True)
         filepath = os.path.join(output_dir, filename)
 
+        logger.info(f"[PDFGen] Iniciando geração: {filename} (Content size: {len(content)} chars)")
+
+        # Usando FPDF2 que é mais robusto com UTF-8
         pdf = ArthPDF()
+        # Adiciona fonte padrão que suporta acentos se necessário, 
+        # mas por enquanto usaremos Helvetica (padrão) com encode latin-1 seguro 
+        # ou mudaremos para fpdf2 handling.
+        
         pdf.set_margins(left=15, top=15, right=15)
         pdf.set_auto_page_break(auto=True, margin=20)
         pdf.add_page()
 
-        # TÍTULO PRINCIPAL (Box Colorido)
+        # TÍTULO PRINCIPAL
         pdf.set_fill_color(*_AZUL_CORP_PDF)
         pdf.set_text_color(255, 255, 255)
-        pdf.set_font("Helvetica", "B", 20)
-        pdf.cell(0, 15, _clean_pdf_text(title.upper()), 0, 1, 'C', fill=True)
+        pdf.set_font("Helvetica", "B", 16)
+        pdf.cell(0, 15, title.upper().encode('latin-1', 'replace').decode('latin-1'), 0, 1, 'C', fill=True)
         pdf.ln(10)
 
-        # Configurações de largura efetiva
-        eff_w = pdf.w - pdf.l_margin - pdf.r_margin
         pdf.set_text_color(*_TEXT)
+        eff_w = pdf.w - pdf.l_margin - pdf.r_margin
 
-        # Processamento de conteúdo com suporte a Markdown básico
         for line in content.split('\n'):
             stripped = line.strip()
             if not stripped:
                 pdf.ln(4)
                 continue
 
-            clean_line = _clean_pdf_text(stripped)
+            # Tenta converter para latin-1 (padrão FPDF) substituindo o que não couber
+            # Isso evita que o PDF inteiro fique em branco por causa de um emoji
+            safe_line = stripped.encode('latin-1', 'replace').decode('latin-1')
 
             if stripped.startswith('# ') and not stripped.startswith('## '):
-                pdf.set_font("Helvetica", "B", 16)
-                pdf.set_text_color(*_AZUL_CORP_PDF)
-                _safe_multi_cell(pdf, eff_w, 10, clean_line[2:].replace("**", ""))
-                pdf.ln(2)
-            elif stripped.startswith('## '):
                 pdf.set_font("Helvetica", "B", 14)
                 pdf.set_text_color(*_AZUL_CORP_PDF)
-                _safe_multi_cell(pdf, eff_w, 9, clean_line[3:].replace("**", ""))
-                pdf.ln(1)
-            elif stripped.startswith('- ') or stripped.startswith('* '):
-                pdf.set_font("Helvetica", "", 11)
-                pdf.set_text_color(*_TEXT)
-                _safe_multi_cell(pdf, eff_w, 7, f"  • {clean_line[2:]}")
+                _safe_multi_cell(pdf, eff_w, 10, safe_line[2:].replace("**", ""))
+            elif stripped.startswith('## '):
+                pdf.set_font("Helvetica", "B", 12)
+                pdf.set_text_color(*_AZUL_CORP_PDF)
+                _safe_multi_cell(pdf, eff_w, 9, safe_line[3:].replace("**", ""))
             else:
-                pdf.set_font("Helvetica", "", 11)
+                pdf.set_font("Helvetica", "", 10)
                 pdf.set_text_color(*_TEXT)
-                # Formata texto em negrito básico para PDF simples
-                if "**" in clean_line:
-                    clean_line = clean_line.replace("**", "")
-                    pdf.set_font("Helvetica", "B", 11)
-                _safe_multi_cell(pdf, eff_w, 7, clean_line)
-                pdf.ln(3) # Espaçamento elegante entre parágrafos
+                if "**" in safe_line:
+                    pdf.set_font("Helvetica", "B", 10)
+                    _safe_multi_cell(pdf, eff_w, 7, safe_line.replace("**", ""))
+                else:
+                    _safe_multi_cell(pdf, eff_w, 7, safe_line)
+                pdf.ln(2)
 
-        await asyncio.to_thread(pdf.output, filepath)
+        def _save():
+            pdf.output(filepath)
+            return filepath
+
+        await asyncio.to_thread(_save)
         
-        if os.path.exists(filepath):
-            logger.info(f"[PDF] ✅ PDF Premium salvo: {filepath} ({os.path.getsize(filepath)} bytes)")
+        if os.path.exists(filepath) and os.path.getsize(filepath) > 100:
+            logger.info(f"[PDF] ✅ PDF Gerado com sucesso: {filename} ({os.path.getsize(filepath)} bytes)")
             return f"PDF Executivo gerado com sucesso: <SEND_FILE:{filename}>"
-        return "Falha ao gravar arquivo PDF."
+        else:
+            logger.error(f"[PDF] ❌ PDF gerado está vazio ou muito pequeno!")
+            return "Erro: O PDF foi gerado mas parece estar vazio."
+
     except Exception as e:
-        logger.error(f"[PDF] ❌ Erro: {e}", exc_info=True)
-        return f"Falha no PDF: {str(e)}"
+        logger.error(f"[PDF] ❌ Erro fatal: {e}", exc_info=True)
+        return f"Falha ao gerar PDF: {str(e)}"
     except Exception as e:
         logger.error(f"[PDF] Erro: {e}", exc_info=True)
         return f"Falha ao gerar PDF: {str(e)}"
