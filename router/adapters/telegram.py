@@ -11,20 +11,40 @@ async def send_telegram_message(chat_id: str, text: str):
     if not settings.TELEGRAM_BOT_TOKEN:
         logger.warning(f"[Mock] Telegram para {chat_id}: {text}")
         return
-        
+
+    if not text: return
+
+    # O Telegram tem um limite de 4096 caracteres. 
+    # RelatÃ³rios densos de Growth costumam ultrapassar isso.
+    MAX_LENGTH = 4000
+
+    def split_text(t, limit):
+        return [t[i:i+limit] for i in range(0, len(t), limit)]
+
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
-    # Mudança para HTML: mais estável que Markdown para dados da web
-    payload = {"chat_id": chat_id, "text": text, "parse_mode": "HTML"}
-    
+
     async with httpx.AsyncClient() as client:
-        try:
-            resp = await client.post(url, json=payload, timeout=15.0)
-            if resp.status_code != 200:
-                logger.warning(f"[Telegram] Falha no envio HTML (Status {resp.status_code}). Tentando texto simples...")
-                payload.pop("parse_mode", None)
-                await client.post(url, json=payload, timeout=15.0)
-        except Exception as e:
-            logger.error(f"Falha ao enviar mensagem Telegram API: {e}")
+        # Quebra em partes para garantir a entrega de relatÃ³rios gigantes
+        chunks = split_text(text, MAX_LENGTH)
+        for i, chunk in enumerate(chunks):
+            # Se for a primeira parte de um texto longo, avisa
+            prefix = f"<b>[PARTE {i+1}/{len(chunks)}]</b>\n\n" if len(chunks) > 1 else ""
+            final_chunk = prefix + chunk
+
+            payload = {"chat_id": chat_id, "text": final_chunk, "parse_mode": "HTML"}
+            try:
+                resp = await client.post(url, json=payload, timeout=20.0)
+                if resp.status_code != 200:
+                    logger.warning(f"[Telegram] Falha no chunk {i+1} (Status {resp.status_code}). Tentando sem HTML...")
+                    # Remove parse_mode e tenta novamente (fallback para texto puro)
+                    payload.pop("parse_mode", None)
+                    await client.post(url, json=payload, timeout=20.0)
+            except Exception as e:
+                logger.error(f"Falha ao enviar chunk {i+1} no Telegram: {e}")
+
+            # Pequeno delay entre partes para evitar limite de rate da API
+            if len(chunks) > 1:
+                await asyncio.sleep(0.5)
 
 async def download_telegram_file(file_id: str, dest_filename: str) -> str:
     """Baixa um arquivo dos servidores do Telegram."""
