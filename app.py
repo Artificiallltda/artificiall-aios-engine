@@ -1,13 +1,17 @@
 import logging
 import uvicorn
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Request, BackgroundTasks
 from fastapi.responses import PlainTextResponse
-from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from router.message_handler import router as message_router
-from scheduler.reminder_worker import scheduler, load_pending_reminders
-from core.engine import engine
-from utils.log_buffer import setup_log_buffer, get_logs_json, get_logs_text
+
+# Importa da estrutura interna que está isolada e correta
+from src.router.message_handler import router as message_router, execute_brain
+from src.scheduler.reminder_worker import scheduler, load_pending_reminders
+from src.core.engine import engine
+from src.utils.log_buffer import setup_log_buffer, get_logs_json, get_logs_text
+from src.config import settings
+
+from fastapi.middleware.cors import CORSMiddleware
 
 # ─── Logging Config ──────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -15,21 +19,12 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     datefmt="%H:%M:%S",
 )
-# Reduz ruído de libs externas
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logging.getLogger("httpcore").setLevel(logging.WARNING)
-logging.getLogger("langchain").setLevel(logging.WARNING)
-logging.getLogger("openai").setLevel(logging.WARNING)
-logging.getLogger("google").setLevel(logging.WARNING)
-
-# Ativa buffer em memória com nível DEBUG para capturar tudo
 setup_log_buffer(root_level=logging.DEBUG)
-
 logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("[SERVER] Iniciando Artificiall Growth Engine...")
+    logger.info("[SERVER] Iniciando Artificiall Growth Engine (Root Context)...")
     scheduler.start()
     load_pending_reminders()
     yield
@@ -37,9 +32,9 @@ async def lifespan(app: FastAPI):
     await engine.cleanup()
     scheduler.shutdown()
 
-app = FastAPI(title="Artificiall Growth Engine", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Artificiall Growth Engine", version="1.0.3", lifespan=lifespan)
 
-# --- CONFIGURAÇÃO DE CORS (LIBERA DASHBOARD VERCEL) ---
+# Ativa CORS Total
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -48,29 +43,55 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def log_resources():
+@app.on_event("startup")
+async def startup_event():
+    logger.info("🚀 [GROWTH ENGINE] Squad de 10 Agentes Ativo na Raiz!")
+
+# ROTA CRÍTICA: Trigger Direto (Fix 404)
+@app.post("/trigger")
+async def trigger_agent_direct(request: Request, background_tasks: BackgroundTasks):
+    """Gatilho direto via API (Dashboard Vercel)"""
     try:
-        import psutil
-        m = psutil.virtual_memory()
-        logger.info(f"[INFRA] RAM: {m.percent}% | CPU: {psutil.cpu_percent()}%")
-    except: pass
+        body = await request.json()
+        agent_id = body.get("agent_id", "@growth-orchestrator")
+        command = body.get("command", "")
+        user_id = body.get("user_id", "dashboard_admin")
+        
+        logger.info(f"⚡ [TRIGGER] Recebido comando para {agent_id}: {command}")
 
-@app.middleware("http")
-async def monitor_infra(request, call_next):
-    log_resources()
-    return await call_next(request)
+        if not command:
+            return {"status": "error", "message": "Command is required"}
 
-app.include_router(message_router, prefix="/api/v1")
+        async def run_trigger():
+            await execute_brain(
+                user_id=user_id, 
+                text=f"{agent_id} {command}", 
+                channel="api",
+                user_name="Dashboard"
+            )
+
+        background_tasks.add_task(run_trigger)
+        return {"status": "triggered", "agent": agent_id, "command": command}
+    except Exception as e:
+        logger.error(f"❌ [TRIGGER] Erro: {e}")
+        return {"status": "error", "message": str(e)}
+
+@app.get("/health")
+async def health():
+    return {"status": "alive", "engine": "Artificiall Growth", "version": "1.0.3", "context": "root"}
 
 @app.get("/")
 async def root():
-    return {"status": "ok", "service": "Artificiall Growth Engine"}
+    return {"status": "ok", "service": "Artificiall Growth Engine", "version": "1.0.3"}
 
-@app.get("/api/v1/logs", response_class=PlainTextResponse)
+# Inclui o restante das rotas (Telegram, Webhooks de Leads, etc.)
+app.include_router(message_router)
+
+@app.get("/logs", response_class=PlainTextResponse)
 async def view_logs(
     n: int = Query(default=60, description="Número de entradas"),
-    level: str = Query(default=None, description="Filtro: ERROR, WARNING, INFO, DEBUG"),
-    fmt: str = Query(default="text", description="Formato: text | json"),
+    level: str = Query(default=None, description="Filtro"),
+    fmt: str = Query(default="text", description="Formato"),
 ):
     if fmt == "json":
         from fastapi.responses import JSONResponse
@@ -78,4 +99,7 @@ async def view_logs(
     return get_logs_text(n=min(n, 100))
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    # O Railway usa a porta da variável de ambiente PORT
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
