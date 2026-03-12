@@ -154,8 +154,16 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
             return None 
 
         except Exception as e:
-            logger.error(f"Erro no execute_brain: {e}", exc_info=True)
-            return f"Erro de processamento: {str(e)}"
+            error_msg = str(e)
+            logger.error(f"Erro no execute_brain: {error_msg}")
+            
+            if "maximum context length" in error_msg.lower():
+                return "âš ï¸  O contexto da conversa ficou muito grande para a IA. Tente iniciar um novo assunto ou ser mais especÃ­fico."
+            
+            # Evita spam de erros tÃ©cnicos complexos no Telegram
+            if channel == "api":
+                return f"Erro: {error_msg}"
+            return "â Œ Desculpe, tive um problema ao processar sua requisiÃ§Ã£o. Minha equipe tÃ©cnica jÃ¡ foi notificada."
 
 @router.post("/trigger")
 async def trigger_agent(request: Request, background_tasks: BackgroundTasks):

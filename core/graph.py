@@ -52,9 +52,26 @@ def load_persona(agent_filename: str) -> str:
     path = os.path.join(settings.SQUAD_PATH, agent_filename)
     try:
         with open(path, "r", encoding="utf-8") as f:
-            return f.read()
+            persona = f.read()
     except FileNotFoundError:
-        return f"Você é o agente {agent_filename}."
+        persona = f"VocÃª Ã© o agente {agent_filename}."
+
+    # Injeta MemÃ³ria Compartilhada (DossiÃª de ReputacaÃ§o)
+    # EVITA injetar o entity-registry.yaml que Ã© gigante
+    shared_memory_path = os.path.join(settings.BASE_DIR, ".aios-core", "data", "ai-reputation-dossier.md")
+    shared_content = ""
+    if os.path.exists(shared_memory_path):
+        try:
+            with open(shared_memory_path, "r", encoding="utf-8") as f:
+                shared_content = f.read()
+        except: pass
+
+    if shared_content:
+        # Trunca para seguranÃ§a (max ~30k tokens de contexto fixo)
+        safe_shared = shared_content[:100000] 
+        return f"{persona}\n\n### CONTEXTO COMPARTILHADO (MEMÃ“RIA DO SQUAD):\n{safe_shared}"
+    
+    return persona
 
 def create_specialist_agent(tools, system_prompt: str, model_instance):
     safe_tools = [t for t in tools if t is not None]
