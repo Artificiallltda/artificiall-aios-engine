@@ -1,0 +1,11 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+.env
+.env.example
+.aios-core/node_modules
+docs
+node_modules
+README.md
+tests
