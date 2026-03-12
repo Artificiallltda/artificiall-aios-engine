@@ -138,7 +138,7 @@ class RouteResponse(BaseModel):
 
 orchestrator_persona = load_persona("aios-master.md")
 prompt = ChatPromptTemplate.from_messages([
-    ("system", orchestrator_persona),
+    SystemMessage(content=orchestrator_persona),
     MessagesPlaceholder(variable_name="messages"),
     ("system", "Quem deve atuar agora? Escolha um de: {members} ou FINISH."),
 ]).partial(members=str(members))
