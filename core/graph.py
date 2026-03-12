@@ -78,14 +78,14 @@ def create_specialist_agent(tools, system_prompt: str, model_instance):
     return create_react_agent(model=model_instance, tools=safe_tools, prompt=system_prompt)
 
 # Agentes
-researcher_agent = create_specialist_agent([search_web, read_url, read_document, search_memory, save_memory, query_knowledge_base], load_persona("growth-researcher.md"), deepseek_llm)
-planner_agent = create_specialist_agent([get_current_time, search_memory, save_memory, schedule_reminder], load_persona("growth-planner.md"), deepseek_llm)
-analyst_agent = create_specialist_agent([analyze_data_file, read_document, read_excel, audit_supabase_security, audit_database_schema, search_memory, save_memory], load_persona("growth-analyst.md"), deepseek_llm)
+researcher_agent = create_specialist_agent([search_web, read_url, read_document, search_memory, save_memory, query_knowledge_base], load_persona("arth-geo-strategist.md"), deepseek_llm)
+planner_agent = create_specialist_agent([get_current_time, search_memory, save_memory, schedule_reminder], load_persona("arth-content-strategist.md"), deepseek_llm)
+analyst_agent = create_specialist_agent([analyze_data_file, read_document, read_excel, audit_supabase_security, audit_database_schema, search_memory, save_memory], load_persona("arth-performance-analyst.md"), deepseek_llm)
 executor_agent = create_specialist_agent([
     get_current_time, execute_python_code, save_memory, search_memory, 
     ask_chefia, generate_image, generate_audio, upload_document_to_knowledge_base,
     generate_docx, generate_pdf, generate_pptx, create_excel, append_to_excel
-], load_persona("growth-executor.md"), executor_llm)
+], load_persona("arth-aeo-content-architect.md"), executor_llm)
 
 async def agent_node(state, agent, name):
     messages = list(state.get("messages", []))
@@ -126,7 +126,7 @@ class RouteResponse(BaseModel):
     next_agent: Literal["FINISH", "growth_researcher", "growth_planner", "growth_executor", "growth_analyst"]
     final_answer: str = ""
 
-orchestrator_persona = load_persona("orchestrator.md")
+orchestrator_persona = load_persona("aios-master.md")
 prompt = ChatPromptTemplate.from_messages([
     ("system", orchestrator_persona),
     MessagesPlaceholder(variable_name="messages"),
