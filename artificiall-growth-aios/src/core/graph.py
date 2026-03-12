@@ -159,7 +159,7 @@ manager_agent = create_specialist_agent(
 async def agent_node(state, agent, name):
     messages = list(state.get("messages", []))
     
-    # Poda Inteligente: Se histórico for > 20 mensagens, mantém as últimas 10 para evitar erro 400
+    # Poda Inteligente: Se histórico for > 20 mensagens, mantém as últimas 10
     if len(messages) > 20:
         messages = messages[-10:]
         logger.info(f"[{name}] Poda inteligente aplicada.")
@@ -181,10 +181,18 @@ async def agent_node(state, agent, name):
         
     msg = msg.model_copy(update={"content": msg_content, "name": name})
 
+    # --- PONTE DE DADOS DE FERRO ---
+    # Acumula o conteúdo da resposta deste agente no campo 'content' do estado global
+    # Isso garante que o executor de PDF/Docx receba todo o histórico acumulado.
+    current_content = state.get("content", "")
+    new_content = current_content
+    if len(str(msg.content)) > 100: # Apenas acumula se for uma resposta substancial
+        new_content += f"\n\n--- INFORMAÇÃO DO AGENTE {name.upper()} ---\n{msg.content}"
+
     return {
         "messages": [msg],
         "sender": name,
-        "content": state.get("content", ""),
+        "content": new_content,
         "user_input": state.get("user_input", "")
     }
 
