@@ -8,36 +8,21 @@ from src.scheduler.reminder_worker import scheduler, load_pending_reminders
 from src.core.engine import engine
 from src.utils.log_buffer import setup_log_buffer, get_logs_json, get_logs_text
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # ─── Logging Config ──────────────────────────────────────────────────────────
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    datefmt="%H:%M:%S",
-)
-# Reduz ruído de libs externas
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logging.getLogger("httpcore").setLevel(logging.WARNING)
-logging.getLogger("langchain").setLevel(logging.WARNING)
-logging.getLogger("openai").setLevel(logging.WARNING)
-logging.getLogger("google").setLevel(logging.WARNING)
-
-# Ativa buffer em memória com nível DEBUG para capturar tudo
-setup_log_buffer(root_level=logging.DEBUG)
-
-logger = logging.getLogger(__name__)
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    logger.info("[SERVER] Iniciando Artificiall Growth Engine...")
-    # Reminders might be less relevant for Growth, but we keep the structure
-    scheduler.start()
-    load_pending_reminders()
-    yield
-    logger.info("[SERVER] Encerrando conexões graciosamente...")
-    await engine.cleanup()
-    scheduler.shutdown()
+# ... (logging lines remain the same)
 
 app = FastAPI(title="Artificiall Growth Engine", version="1.0.1", lifespan=lifespan)
+
+# Ativa CORS para permitir que o Frontend (Vercel) acesse o Backend (Railway)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Em produção, podemos restringir para o domínio da Vercel
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup_event():

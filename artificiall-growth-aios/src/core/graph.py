@@ -182,6 +182,35 @@ async def agent_node(state, agent, name):
         
     msg = msg.model_copy(update={"content": msg_content, "name": name})
 
+    # --- PERSISTÊNCIA AUTOMÁTICA DE LEADS NO SUPABASE (DASHBOARD) ---
+    # Se o agente falar sobre empresas/CEOs, tentamos extrair e salvar na tabela 'leads'
+    if name == "growth_sdr" and len(str(msg.content)) > 200:
+        try:
+            from src.config import settings
+            from supabase import create_client
+            if settings.SUPABASE_URL and settings.SUPABASE_SERVICE_KEY:
+                supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY)
+                # Extração simples via regex (Melhorável com LLM no futuro)
+                # Procura por linhas que pareçam uma empresa ou nome
+                lines = str(msg.content).split('\n')
+                for line in lines:
+                    if '|' in line and '-' not in line and 'Imobiliária' not in line:
+                        parts = [p.strip() for p in line.split('|') if p.strip()]
+                        if len(parts) >= 2:
+                            company = parts[0].replace('**', '')
+                            ceo = parts[1].replace('**', '')
+                            # Insere se não for cabeçalho
+                            if company != 'Imobiliária' and company != 'Empresa':
+                                supabase.table('leads').insert({
+                                    "company_name": company,
+                                    "status": "Scraping / Identified",
+                                    "source": "SDR Scan",
+                                    "raw_data": {"ceo": ceo, "full_line": line}
+                                }).execute()
+                                logger.info(f"[CORE] Lead salvo no Supabase: {company}")
+        except Exception as e:
+            logger.error(f"[CORE] Falha ao auto-salvar lead: {e}")
+
     # --- PONTE DE DADOS DE FERRO ---
     # Acumula o conteúdo da resposta deste agente no campo 'content' do estado global
     # Isso garante que o executor de PDF/Docx receba todo o histórico acumulado.
