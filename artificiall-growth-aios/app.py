@@ -7,18 +7,35 @@ from src.router.message_handler import router as message_router
 from src.scheduler.reminder_worker import scheduler, load_pending_reminders
 from src.core.engine import engine
 from src.utils.log_buffer import setup_log_buffer, get_logs_json, get_logs_text
+from src.config import settings
 
 from fastapi.middleware.cors import CORSMiddleware
 
 # ─── Logging Config ──────────────────────────────────────────────────────────
-# ... (logging lines remain the same)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%H:%M:%S",
+)
+setup_log_buffer(root_level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Artificiall Growth Engine", version="1.0.1", lifespan=lifespan)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info("[SERVER] Iniciando Artificiall Growth Engine...")
+    scheduler.start()
+    load_pending_reminders()
+    yield
+    logger.info("[SERVER] Encerrando conexões graciosamente...")
+    await engine.cleanup()
+    scheduler.shutdown()
 
-# Ativa CORS para permitir que o Frontend (Vercel) acesse o Backend (Railway)
+app = FastAPI(title="Artificiall Growth Engine", version="1.0.2", lifespan=lifespan)
+
+# Ativa CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Em produção, podemos restringir para o domínio da Vercel
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,32 +43,26 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info("🚀 [GROWTH ENGINE] Squad de 10 Agentes Ativo e Blindado!")
-    logger.info("📡 [GROWTH ENGINE] Conexão Vercel: " + (settings.VERCEL_WEBHOOK_URL[:20] + "..." if settings.VERCEL_WEBHOOK_URL else "NÃO CONFIGURADA"))
+    logger.info("🚀 [GROWTH ENGINE] Squad de 10 Agentes Ativo!")
 
-def log_resources():
-    try:
-        import psutil
-        m = psutil.virtual_memory()
-        logger.info(f"[INFRA] RAM: {m.percent}% | CPU: {psutil.cpu_percent()}%")
-    except: pass
+# Rota de Health Check simplificada
+@app.get("/health")
+async def health():
+    return {"status": "alive", "engine": "Artificiall Growth", "version": "1.0.2"}
 
-@app.middleware("http")
-async def monitor_infra(request, call_next):
-    log_resources()
-    return await call_next(request)
-
-app.include_router(message_router, prefix="/api/v1")
-
+# Rota Raiz
 @app.get("/")
 async def root():
     return {"status": "ok", "service": "Artificiall Growth Engine"}
 
-@app.get("/api/v1/logs", response_class=PlainTextResponse)
+# Inclui o roteador SEM prefixo para simplificar o Dashboard
+app.include_router(message_router)
+
+@app.get("/logs", response_class=PlainTextResponse)
 async def view_logs(
     n: int = Query(default=60, description="Número de entradas"),
-    level: str = Query(default=None, description="Filtro: ERROR, WARNING, INFO, DEBUG"),
-    fmt: str = Query(default="text", description="Formato: text | json"),
+    level: str = Query(default=None, description="Filtro"),
+    fmt: str = Query(default="text", description="Formato"),
 ):
     if fmt == "json":
         from fastapi.responses import JSONResponse
