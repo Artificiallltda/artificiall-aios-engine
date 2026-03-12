@@ -100,7 +100,7 @@ planner_agent = create_specialist_agent(
 
 # 3. Performance Analyst (Analista)
 analyst_agent = create_specialist_agent(
-    [analyze_data_file, read_document, read_excel, audit_supabase_security, audit_database_schema, search_memory, save_memory], 
+    [analyze_data_file, read_document, read_excel, audit_supabase_security, audit_database_schema, search_memory, save_memory, generate_pdf, generate_docx], 
     load_persona("arth-performance-analyst.md"), 
     deepseek_llm
 )
