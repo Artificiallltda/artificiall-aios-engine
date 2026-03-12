@@ -99,6 +99,13 @@ executor_agent = create_specialist_agent([
 
 async def agent_node(state, agent, name):
     messages = list(state.get("messages", []))
+    
+    # BLINDAGEM NUCLEAR: Se o histÃ³rico vindo do banco for gigante (corrompido), 
+    # mantemos apenas as Ãºltimas 5 mensagens para quebrar o erro 400.
+    if len(messages) > 10:
+        logger.warning(f"[{name}] HistÃ³rico excessivo detectado ({len(messages)} msgs). Podando para seguranÃ§a.")
+        messages = messages[-5:]
+
     result = await agent.ainvoke({**state, "messages": messages}, RunnableConfig(recursion_limit=50))
     msg = result["messages"][-1]
 
@@ -160,7 +167,9 @@ async def supervisor_node(state: AgentState):
     if has_file and specialist_runs.get("growth_executor", 0) > 0:
         return {"next_agent": "FINISH"}
 
-    short_messages = messages[-15:]
+    # BLINDAGEM DO SUPERVISOR: Limita o histÃ³rico visto pelo orquestrador
+    # Se o banco tiver 240k tokens, aqui nÃ³s filtramos e mandamos apenas o essencial.
+    short_messages = messages[-10:] if len(messages) > 10 else messages
     routing_result = await supervisor_chain.ainvoke({**state, "messages": short_messages})
     
     ret = {"next_agent": routing_result.next_agent}

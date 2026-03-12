@@ -41,7 +41,8 @@ async def notify_vercel_dashboard(payload: dict):
         logger.error(f"â Œ Falha ao notificar Vercel: {e}")
 
 def _get_thread_id(channel: str, user_id: str) -> str:
-    key = f"{channel}_{user_id}"
+    # VersÃ£o v2 forÃ§a um reset de sessÃ£o para limpar o histÃ³rico corrompido do Supabase (240k tokens)
+    key = f"{channel}_{user_id}_v2"
     counter = _session_counters.get(key, 0)
     return f"{key}_s{counter}" if counter > 0 else key
 
