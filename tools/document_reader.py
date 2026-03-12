@@ -4,7 +4,7 @@ from typing import Optional
 from langchain_core.tools import tool
 import fitz  # PyMuPDF
 from docx import Document
-from src.config import settings
+from config import settings
 
 logger = logging.getLogger(__name__)
 

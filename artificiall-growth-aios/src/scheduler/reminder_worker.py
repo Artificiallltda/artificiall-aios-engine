@@ -43,9 +43,9 @@ async def execute_reminder(reminder_id: str, user_id: str, channel: str, message
     Função executada pelo APScheduler no momento exato agendado.
     """
     try:
-        from src.core.engine import engine
+        from core.engine import engine
         from langchain_core.messages import HumanMessage
-        from src.router.message_handler import send_telegram_message, send_whatsapp_message
+        from router.message_handler import send_telegram_message, send_whatsapp_message
         
         # Quando acorda, o agente precisa se expressar proativamente
         prompt = (

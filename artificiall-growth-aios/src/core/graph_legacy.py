@@ -4,18 +4,18 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.checkpoint.memory import MemorySaver
-from src.core.state import AgentState
-from src.tools.basic_tools import get_current_time
-from src.tools.web_search import search_web
-from src.tools.doc_generator import generate_docx, generate_pdf
-from src.tools.code_executor import execute_python_code
-from src.tools.memory_tools import save_memory, search_memory
-from src.tools.chefia_integration import ask_chefia
-from src.tools.image_generator import generate_image
-from src.tools.data_analyst import analyze_data_file
-from src.tools.scheduler_tools import schedule_reminder
-from src.tools.pptx_generator import generate_pptx
-from src.config import settings
+from core.state import AgentState
+from tools.basic_tools import get_current_time
+from tools.web_search import search_web
+from tools.doc_generator import generate_docx, generate_pdf
+from tools.code_executor import execute_python_code
+from tools.memory_tools import save_memory, search_memory
+from tools.chefia_integration import ask_chefia
+from tools.image_generator import generate_image
+from tools.data_analyst import analyze_data_file
+from tools.scheduler_tools import schedule_reminder
+from tools.pptx_generator import generate_pptx
+from config import settings
 
 # 1. Definir ferramentas
 TOTO_TOOLS = [get_current_time, search_web, generate_docx, generate_pdf, execute_python_code, save_memory, search_memory, ask_chefia, generate_image, analyze_data_file, schedule_reminder, generate_pptx]

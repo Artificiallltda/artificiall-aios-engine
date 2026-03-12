@@ -6,7 +6,7 @@ from langchain_core.tools import tool
 import io
 import contextlib
 import asyncio
-from src.config import settings
+from config import settings
 
 @tool
 async def analyze_data_file(instruction: str, data_string: str) -> str:

@@ -3,7 +3,7 @@ import uuid
 import httpx
 import logging
 from langchain_core.tools import tool
-from src.config import settings
+from config import settings
 
 logger = logging.getLogger(__name__)
 

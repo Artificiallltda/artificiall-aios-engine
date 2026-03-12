@@ -1,6 +1,6 @@
 import requests
 import os
-from src.config import settings
+from config import settings
 
 def set_webhook(url):
     token = settings.TELEGRAM_BOT_TOKEN

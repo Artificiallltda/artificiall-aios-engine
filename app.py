@@ -3,10 +3,10 @@ import uvicorn
 from fastapi import FastAPI, Query
 from fastapi.responses import PlainTextResponse
 from contextlib import asynccontextmanager
-from src.router.message_handler import router as message_router
-from src.scheduler.reminder_worker import scheduler, load_pending_reminders
-from src.core.engine import engine
-from src.utils.log_buffer import setup_log_buffer, get_logs_json, get_logs_text
+from router.message_handler import router as message_router
+from scheduler.reminder_worker import scheduler, load_pending_reminders
+from core.engine import engine
+from utils.log_buffer import setup_log_buffer, get_logs_json, get_logs_text
 
 # ─── Logging Config ──────────────────────────────────────────────────────────
 logging.basicConfig(

@@ -8,10 +8,10 @@ import os
 import uuid
 from langchain_core.messages import HumanMessage, AIMessage
 
-from src.config import settings
-from src.core.engine import engine
-from src.router.adapters.whatsapp import process_whatsapp_reply, send_whatsapp_message
-from src.router.adapters.telegram import process_telegram_reply, send_telegram_message, safe_send_file
+from config import settings
+from core.engine import engine
+from router.adapters.whatsapp import process_whatsapp_reply, send_whatsapp_message
+from router.adapters.telegram import process_telegram_reply, send_telegram_message, safe_send_file
 
 try:
     from supabase import create_client, Client
@@ -148,7 +148,7 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
                     if channel == "telegram":
                         await safe_send_file(user_id, full_path)
                     elif channel == "whatsapp":
-                        from src.router.adapters.whatsapp import safe_send_whatsapp_file
+                        from router.adapters.whatsapp import safe_send_whatsapp_file
                         await safe_send_whatsapp_file(user_id, full_path)
 
             return None 

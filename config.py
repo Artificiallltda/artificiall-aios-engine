@@ -10,8 +10,8 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     
     # --- PATHS ---
-    # Base do projeto (arth-executive/)
-    BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Base do projeto
+    BASE_DIR: str = os.path.dirname(os.path.abspath(__file__))
 
     # Pasta de saídas de dados (Blindagem Docker/Railway)
     # Se estiver rodando no Linux (Docker), usa caminho absoluto /app
@@ -51,9 +51,10 @@ class Settings(BaseSettings):
     # --- WEBHOOKS (DASHBOARD) ---
     VERCEL_WEBHOOK_URL: str = os.getenv("VERCEL_WEBHOOK_URL", "")
 
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    model_config = {
+        "env_file": ".env",
+        "extra": "ignore"
+    }
 
 settings = Settings()
 
