@@ -50,19 +50,29 @@ executor_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
 def load_persona(agent_filename: str) -> str:
     path = os.path.join(settings.SQUAD_PATH, agent_filename)
+    persona = ""
     try:
+        # Tenta UTF-8 primeiro
         with open(path, "r", encoding="utf-8") as f:
             persona = f.read()
+    except UnicodeDecodeError:
+        try:
+            # Fallback para Latin-1 se UTF-8 falhar
+            with open(path, "r", encoding="latin-1") as f:
+                persona = f.read()
+        except Exception as e:
+            logger.error(f"Erro ao ler persona {agent_filename}: {e}")
+            persona = f"VocÃª Ã© o agente {agent_filename}."
     except FileNotFoundError:
         persona = f"VocÃª Ã© o agente {agent_filename}."
 
     # Injeta MemÃ³ria Compartilhada (DossiÃª de ReputacaÃ§o)
-    # EVITA injetar o entity-registry.yaml que Ã© gigante
     shared_memory_path = os.path.join(settings.BASE_DIR, ".aios-core", "data", "ai-reputation-dossier.md")
     shared_content = ""
     if os.path.exists(shared_memory_path):
         try:
-            with open(shared_memory_path, "r", encoding="utf-8") as f:
+            # Usa errors='replace' para garantir que nunca trave por causa de um caractere
+            with open(shared_memory_path, "r", encoding="utf-8", errors="replace") as f:
                 shared_content = f.read()
         except: pass
 
