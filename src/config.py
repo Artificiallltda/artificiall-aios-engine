@@ -6,8 +6,8 @@ load_dotenv()
 
 class Settings(BaseSettings):
     # --- APP INFO ---
-    APP_NAME: str = "Arth Executive AI"
-    VERSION: str = "0.1.1"
+    APP_NAME: str = "Artificiall Growth Engine"
+    VERSION: str = "1.0.0"
     
     # --- PATHS ---
     # Base do projeto (arth-executive/)
@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     DATA_OUTPUTS_PATH: str = "/app/data/outputs" if os.name != 'nt' else os.path.join(BASE_DIR, "data", "outputs")
 
     # Pasta das Personas (Skins)
-    SQUAD_PATH: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), "agents")
+    SQUAD_PATH: str = os.path.join(BASE_DIR, ".aios-core", "development", "agents")
 
 
     # --- MODELS ---
