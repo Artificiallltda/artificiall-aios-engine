@@ -133,7 +133,8 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
                         "content": clean_response[:200] + "..." if len(clean_response) > 200 else clean_response
                     })
 
-            for filename in unique_files:                full_path = os.path.join(settings.DATA_OUTPUTS_PATH, filename)
+            for filename in unique_files:
+                full_path = os.path.join(settings.DATA_OUTPUTS_PATH, filename)
                 import time
                 start_wait = time.time()
                 file_ready = False
