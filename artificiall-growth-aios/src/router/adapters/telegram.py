@@ -3,7 +3,7 @@ import httpx
 import os
 import re
 import asyncio
-from config import settings
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 

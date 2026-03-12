@@ -2,8 +2,8 @@ import logging
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from psycopg_pool import AsyncConnectionPool
-from core.graph import build_growth_graph
-from config import settings
+from src.core.graph import build_growth_graph
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 

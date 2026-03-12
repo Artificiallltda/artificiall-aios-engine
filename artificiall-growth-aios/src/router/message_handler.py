@@ -8,10 +8,10 @@ import os
 import uuid
 from langchain_core.messages import HumanMessage, AIMessage
 
-from config import settings
-from core.engine import engine
-from router.adapters.whatsapp import process_whatsapp_reply, send_whatsapp_message
-from router.adapters.telegram import process_telegram_reply, send_telegram_message, safe_send_file
+from src.config import settings
+from src.core.engine import engine
+from src.router.adapters.whatsapp import process_whatsapp_reply, send_whatsapp_message
+from src.router.adapters.telegram import process_telegram_reply, send_telegram_message, safe_send_file
 
 try:
     from supabase import create_client, Client
@@ -36,9 +36,9 @@ async def notify_vercel_dashboard(payload: dict):
         import httpx
         async with httpx.AsyncClient() as client:
             await client.post(settings.VERCEL_WEBHOOK_URL, json=payload, timeout=5.0)
-            logger.info(f"âœ… Dashboard Vercel notificado: {payload.get('action')}")
+            logger.info(f"✅ Dashboard Vercel notificado: {payload.get('action')}")
     except Exception as e:
-        logger.error(f"â Œ Falha ao notificar Vercel: {e}")
+        logger.error(f"❌ Falha ao notificar Vercel: {e}")
 
 def _get_thread_id(channel: str, user_id: str) -> str:
     key = f"{channel}_{user_id}"
@@ -69,10 +69,16 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
             }
 
             STATUS_NODES = {
-                "growth_researcher": "Pesquisando dados relevantes... 🔍⏳",
-                "growth_executor": "Gerando criativos e arquivos... 💻⏳",
-                "growth_analyst": "Analisando dados do mercado... 📊⏳",
-                "growth_planner": "Estruturando estratégia de Growth... 📋⏳",
+                "growth_researcher": "Pesquisando dados GEO e mercado... 🔍🌍",
+                "growth_planner": "Estruturando estratégia AEO... 📋🚀",
+                "growth_executor": "Gerando criativos e ativos... 🎨💻",
+                "growth_analyst": "Analisando performance e leads... 📊🎯",
+                "growth_sdr": "Varrendo o mercado por CEOs/CFOs... 🕵️‍♂️📈",
+                "growth_closer": "Preparando abordagem de fechamento... 🤝💰",
+                "growth_commerce": "Configurando fluxos de venda... 🛒⚡",
+                "growth_auditor": "Auditando qualidade E-E-A-T... ⚖️🛡️",
+                "growth_creative": "Refinando branding da campanha... 🎨✨",
+                "growth_manager": "Coordenando canais e fluxos... 🕹️📢",
             }
             
             sent_etas = set()
@@ -81,8 +87,18 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
             async for event in brain.astream(initial_state, config=config):
                 for node, state_update in event.items():
                     if node in STATUS_NODES and node not in sent_etas:
-                        if status_callback: await status_callback(STATUS_NODES[node])
+                        status_msg = STATUS_NODES[node]
+                        if status_callback: await status_callback(status_msg)
                         sent_etas.add(node)
+                        
+                        # Notifica Dashboard Vercel IMEDIATAMENTE sobre o progresso
+                        if settings.VERCEL_WEBHOOK_URL:
+                            await notify_vercel_dashboard({
+                                "agent": node,
+                                "action": "status_update",
+                                "user_id": user_id,
+                                "content": status_msg
+                            })
 
                     msgs = state_update.get("messages", [])
                     for m in msgs:
@@ -91,7 +107,8 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
                         if hasattr(m, "type") and m.type == "ai" and len(content_str) > 10:
                             responses_pool.append({"node": node, "text": content_str})
 
-            priority_nodes = ["growth_analyst", "growth_executor", "growth_researcher"]
+            # SDR e Planner agora são prioridades para resposta direta
+            priority_nodes = ["growth_analyst", "growth_executor", "growth_researcher", "growth_sdr", "growth_planner"]
             final_text = ""
             
             specialist_msgs = [r for r in responses_pool if r["node"] in priority_nodes]
@@ -100,7 +117,7 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
             elif responses_pool:
                 final_text = max(responses_pool, key=lambda x: len(x["text"]))["text"]
             else:
-                final_text = "Processado com sucesso pelo Artificiall Growth."
+                final_text = "Processado com sucesso pelo Artificiall Growth Engine."
 
             all_ai_text = " ".join([r["text"] for r in responses_pool])
             file_tags = re.findall(r'<(?:SEND_FILE|SEND_AUDIO):([^>]+)>', all_ai_text)
@@ -127,13 +144,14 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
                 # Notifica Dashboard Vercel (Loop de Feedback)
                 if settings.VERCEL_WEBHOOK_URL:
                     await notify_vercel_dashboard({
-                        "agent": "Orion (AIOS)",
+                        "agent": "Orion (Growth)",
                         "action": "task_completed",
                         "user_id": user_id,
-                        "content": clean_response[:200] + "..." if len(clean_response) > 200 else clean_response
+                        "content": clean_response
                     })
 
-            for filename in unique_files:                full_path = os.path.join(settings.DATA_OUTPUTS_PATH, filename)
+            for filename in unique_files:
+                full_path = os.path.join(settings.DATA_OUTPUTS_PATH, filename)
                 import time
                 start_wait = time.time()
                 file_ready = False
@@ -147,7 +165,7 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
                     if channel == "telegram":
                         await safe_send_file(user_id, full_path)
                     elif channel == "whatsapp":
-                        from router.adapters.whatsapp import safe_send_whatsapp_file
+                        from src.router.adapters.whatsapp import safe_send_whatsapp_file
                         await safe_send_whatsapp_file(user_id, full_path)
 
             return None 
@@ -169,7 +187,6 @@ async def trigger_agent(request: Request, background_tasks: BackgroundTasks):
             return {"status": "error", "message": "Command is required"}
 
         async def run_trigger():
-            # Executa o cÃ©rebro agentico via canal 'api'
             await execute_brain(
                 user_id=user_id, 
                 text=f"{agent_id} {command}", 

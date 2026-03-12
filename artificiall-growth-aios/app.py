@@ -3,10 +3,10 @@ import uvicorn
 from fastapi import FastAPI, Query
 from fastapi.responses import PlainTextResponse
 from contextlib import asynccontextmanager
-from router.message_handler import router as message_router
-from scheduler.reminder_worker import scheduler, load_pending_reminders
-from core.engine import engine
-from utils.log_buffer import setup_log_buffer, get_logs_json, get_logs_text
+from src.router.message_handler import router as message_router
+from src.scheduler.reminder_worker import scheduler, load_pending_reminders
+from src.core.engine import engine
+from src.utils.log_buffer import setup_log_buffer, get_logs_json, get_logs_text
 
 # ─── Logging Config ──────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -37,7 +37,12 @@ async def lifespan(app: FastAPI):
     await engine.cleanup()
     scheduler.shutdown()
 
-app = FastAPI(title="Artificiall Growth Engine", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Artificiall Growth Engine", version="1.0.1", lifespan=lifespan)
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info("🚀 [GROWTH ENGINE] Squad de 10 Agentes Ativo e Blindado!")
+    logger.info("📡 [GROWTH ENGINE] Conexão Vercel: " + (settings.VERCEL_WEBHOOK_URL[:20] + "..." if settings.VERCEL_WEBHOOK_URL else "NÃO CONFIGURADA"))
 
 def log_resources():
     try:

@@ -3,7 +3,7 @@ import httpx
 import base64
 import os
 import re
-from config import settings
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 
