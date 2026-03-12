@@ -1,10 +1,18 @@
 import logging
 import uvicorn
+import sys
+import os
 from fastapi import FastAPI, Query, Request, BackgroundTasks
 from fastapi.responses import PlainTextResponse
 from contextlib import asynccontextmanager
 
-# Importa da estrutura interna que está isolada e correta
+# INJEÇÃO DE PATH: Garante que o Python encontre a pasta 'src' dentro da subpasta do projeto
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_subfolder = os.path.join(current_dir, "artificiall-growth-aios")
+if project_subfolder not in sys.path:
+    sys.path.append(project_subfolder)
+
+# Agora os imports vão funcionar
 from src.router.message_handler import router as message_router, execute_brain
 from src.scheduler.reminder_worker import scheduler, load_pending_reminders
 from src.core.engine import engine
