@@ -59,17 +59,13 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
         try:
             brain = await engine.get_brain()
             
-            # Limpeza de Contexto: busca o estado atual e mantÃ©m apenas as Ãºltimas mensagens
-            # Isso evita o erro de 240k tokens carregados do banco de dados
-            current_state = await brain.aget_state(config)
-            existing_messages = current_state.values.get("messages", []) if current_state.values else []
-            
-            # MantÃ©m apenas as Ãºltimas 10 mensagens de histÃ³rico + a nova mensagem
-            trimmed_messages = existing_messages[-10:] if len(existing_messages) > 10 else existing_messages
-            all_messages = trimmed_messages + [HumanMessage(content=text)]
+            # O LangGraph jÃ¡ carrega o histÃ³rico do Supabase via 'thread_id' no config.
+            # Injetar o histÃ³rico manualmente no initial_state causa duplicaÃ§Ã£o infinita (Erro 400).
+            # Enviamos apenas a NOVA mensagem.
+            new_message = HumanMessage(content=text)
 
             initial_state = {
-                "messages": all_messages,
+                "messages": [new_message],
                 "user_id": str(user_id),
                 "channel": channel,
                 "user_input": text,
