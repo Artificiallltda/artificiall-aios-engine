@@ -51,7 +51,8 @@ class Settings(BaseSettings):
     # --- WEBHOOKS (DASHBOARD) ---
     VERCEL_WEBHOOK_URL: str = os.getenv("VERCEL_WEBHOOK_URL", "")
 
-    class Config:        env_file = ".env"
+    class Config:
+        env_file = ".env"
         extra = "ignore"
 
 settings = Settings()
