@@ -3,7 +3,7 @@ from typing import Optional
 from langchain_core.tools import tool
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
-from config import settings
+from src.config import settings
 
 PERSIST_DIRECTORY = os.path.join(os.getcwd(), "data", "chroma_db")
 _vector_store = None

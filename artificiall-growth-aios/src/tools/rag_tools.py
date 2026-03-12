@@ -5,7 +5,7 @@ from langchain_core.tools import tool
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
-from config import settings
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 

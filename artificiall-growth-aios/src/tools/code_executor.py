@@ -2,7 +2,7 @@ from langchain_core.tools import tool
 import asyncio
 import os
 import uuid
-from config import settings
+from src.config import settings
 
 @tool
 async def execute_python_code(code: str) -> str:

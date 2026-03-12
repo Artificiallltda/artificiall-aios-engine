@@ -1,7 +1,7 @@
 from langchain_core.tools import tool
 import httpx
 import logging
-from config import settings
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 

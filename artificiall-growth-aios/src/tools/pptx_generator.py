@@ -12,7 +12,7 @@ from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
-from config import settings
+from src.config import settings
 from tools.image_generator import generate_image
 from typing import Any, Union
 from pydantic import BaseModel, Field

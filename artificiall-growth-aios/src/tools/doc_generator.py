@@ -11,7 +11,7 @@ from docx import Document
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from fpdf import FPDF
-from config import settings
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 

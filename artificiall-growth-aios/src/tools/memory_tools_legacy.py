@@ -2,7 +2,7 @@ import os
 from langchain_core.tools import tool
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
-from config import settings
+from src.config import settings
 
 # Inicializa o banco vetorial local (SQLite)
 # Ele vai criar uma pasta "chroma_db" dentro de "data"

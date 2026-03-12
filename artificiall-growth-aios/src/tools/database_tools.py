@@ -1,6 +1,6 @@
 from langchain_core.tools import tool
 from utils.supabase_utils import run_rls_audit, run_schema_audit
-from config import settings
+from src.config import settings
 
 @tool
 async def audit_supabase_security():

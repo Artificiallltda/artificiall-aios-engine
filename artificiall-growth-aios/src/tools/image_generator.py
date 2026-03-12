@@ -6,7 +6,7 @@ import asyncio
 import re
 from typing import Optional
 from langchain_core.tools import tool
-from config import settings
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 
