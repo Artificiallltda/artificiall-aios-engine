@@ -159,10 +159,11 @@ manager_agent = create_specialist_agent(
 async def agent_node(state, agent, name):
     messages = list(state.get("messages", []))
     
-    # Poda Inteligente: Se histórico for > 20 mensagens, mantém as últimas 10
-    if len(messages) > 20:
-        messages = messages[-10:]
-        logger.info(f"[{name}] Poda inteligente aplicada.")
+    # PROTEÇÃO DE MEMÓRIA EXPANDIDA (AUDITORIA ORION)
+    # Aumentamos para 100 mensagens para garantir que pesquisas longas não sejam deletadas.
+    if len(messages) > 100:
+        messages = messages[-30:]
+        logger.warning(f"[{name}] Histórico muito longo ({len(messages)} msgs). Aplicando poda de segurança moderada.")
 
     result = await agent.ainvoke({**state, "messages": messages}, RunnableConfig(recursion_limit=50))
     msg = result["messages"][-1]
