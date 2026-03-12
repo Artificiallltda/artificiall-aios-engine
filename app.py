@@ -2,6 +2,7 @@ import logging
 import uvicorn
 from fastapi import FastAPI, Query
 from fastapi.responses import PlainTextResponse
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from router.message_handler import router as message_router
 from scheduler.reminder_worker import scheduler, load_pending_reminders
@@ -29,7 +30,6 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("[SERVER] Iniciando Artificiall Growth Engine...")
-    # Reminders might be less relevant for Growth, but we keep the structure
     scheduler.start()
     load_pending_reminders()
     yield
@@ -38,6 +38,15 @@ async def lifespan(app: FastAPI):
     scheduler.shutdown()
 
 app = FastAPI(title="Artificiall Growth Engine", version="1.0.0", lifespan=lifespan)
+
+# --- CONFIGURAÇÃO DE CORS (LIBERA DASHBOARD VERCEL) ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def log_resources():
     try:
