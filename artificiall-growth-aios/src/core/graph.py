@@ -53,26 +53,39 @@ gemini_llm = ChatGoogleGenerativeAI(model=settings.GEMINI_MODEL, google_api_key=
 def load_persona(agent_filename: str) -> str:
     path = os.path.join(settings.SQUAD_PATH, agent_filename)
     persona = ""
+    
+    def _read_file_safe(file_path):
+        # Tenta UTF-8 primeiro, depois Latin-1 como fallback
+        for enc in ['utf-8', 'latin-1', 'cp1252']:
+            try:
+                with open(file_path, "r", encoding=enc) as f:
+                    return f.read()
+            except UnicodeDecodeError:
+                continue
+        # Se tudo falhar, lê com replace
+        with open(file_path, "r", encoding='utf-8', errors='replace') as f:
+            return f.read()
+
     try:
-        with open(path, "r", encoding="utf-8") as f:
-            persona = f.read()
-    except FileNotFoundError:
-        logger.warning(f"[CORE] Persona não encontrada em {path}. Usando fallback.")
+        if os.path.exists(path):
+            persona = _read_file_safe(path)
+        else:
+            logger.warning(f"[CORE] Persona não encontrada em {path}. Usando fallback.")
+            persona = f"Você é o agente {agent_filename}."
+    except Exception as e:
+        logger.error(f"[CORE] Erro fatal ao ler persona {agent_filename}: {e}")
         persona = f"Você é o agente {agent_filename}."
 
     # --- INJEÇÃO DE MEMÓRIA COMPARTILHADA (Dossiê de Reputação) ---
-    # Caminho ajustado para o squad de Growth v2
     shared_memory_path = os.path.join(settings.BASE_DIR, "squads", "squad-artificiall-growth-v2", "data", "ai-reputation-dossier.md")
     shared_content = ""
     if os.path.exists(shared_memory_path):
         try:
-            with open(shared_memory_path, "r", encoding="utf-8", errors="replace") as f:
-                shared_content = f.read()
+            shared_content = _read_file_safe(shared_memory_path)
         except Exception as e:
             logger.error(f"[CORE] Erro ao ler dossiê de reputação: {e}")
 
     if shared_content:
-        # Garante que o dossiê não exceda um limite seguro de tokens (~30k chars)
         safe_shared = shared_content[:30000] 
         return f"{persona}\n\n### CONTEXTO COMPARTILHADO (MEMÓRIA DO SQUAD):\n{safe_shared}"
     

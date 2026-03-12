@@ -12,7 +12,7 @@ project_subfolder = os.path.join(current_dir, "artificiall-growth-aios")
 if project_subfolder not in sys.path:
     sys.path.append(project_subfolder)
 
-# Agora os imports vão funcionar
+# Agora os imports vão funcionar pois o path acima aponta para onde a pasta 'src' reside
 from src.router.message_handler import router as message_router, execute_brain
 from src.scheduler.reminder_worker import scheduler, load_pending_reminders
 from src.core.engine import engine
