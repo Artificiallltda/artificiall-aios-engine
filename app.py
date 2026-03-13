@@ -92,8 +92,9 @@ async def health():
 async def root():
     return {"status": "ok", "service": "Artificiall Growth Engine", "version": "1.0.3"}
 
-# Inclui o restante das rotas (Telegram, Webhooks de Leads, etc.)
+# Inclui o roteador em dois lugares para compatibilidade (Legado /api/v1 e Novo Direto)
 app.include_router(message_router)
+app.include_router(message_router, prefix="/api/v1")
 
 @app.get("/logs", response_class=PlainTextResponse)
 async def view_logs(
