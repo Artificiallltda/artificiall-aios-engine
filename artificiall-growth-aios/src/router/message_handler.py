@@ -100,10 +100,14 @@ async def execute_brain(user_id: str, text: str, channel: str = "whatsapp", stat
                                 "content": status_msg
                             })
 
-                    msgs = state_update.get("messages", [])
                     for m in msgs:
                         if not m.content: continue
-                        content_str = str(m.content)
+                        try:
+                            # Garante que o conteúdo seja tratado como string de forma segura
+                            content_str = str(m.content)
+                        except Exception:
+                            content_str = "[Erro ao decodificar conteúdo da mensagem]"
+                            
                         if hasattr(m, "type") and m.type == "ai" and len(content_str) > 10:
                             responses_pool.append({"node": node, "text": content_str})
 
