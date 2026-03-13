@@ -204,24 +204,29 @@ async def agent_node(state, agent, name):
             from supabase import create_client
             if settings.SUPABASE_URL and settings.SUPABASE_SERVICE_KEY:
                 supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY)
-                # Extração simples via regex (Melhorável com LLM no futuro)
-                # Procura por linhas que pareçam uma empresa ou nome
                 lines = str(msg.content).split('\n')
+                found_count = 0
                 for line in lines:
-                    if '|' in line and '-' not in line and 'Imobiliária' not in line:
-                        parts = [p.strip() for p in line.split('|') if p.strip()]
+                    # Detecta linhas de tabela ou listas com nomes
+                    if ('|' in line or ':' in line) and len(line) > 10:
+                        # Limpeza básica de Markdown
+                        clean_line = line.replace('**', '').replace('*', '').strip()
+                        parts = [p.strip() for p in re.split(r'[|:]', clean_line) if p.strip()]
+                        
                         if len(parts) >= 2:
-                            company = parts[0].replace('**', '')
-                            ceo = parts[1].replace('**', '')
-                            # Insere se não for cabeçalho
-                            if company != 'Imobiliária' and company != 'Empresa':
-                                supabase.table('leads').insert({
-                                    "company_name": company,
-                                    "status": "Scraping / Identified",
-                                    "source": "SDR Scan",
-                                    "raw_data": {"ceo": ceo, "full_line": line}
-                                }).execute()
-                                logger.info(f"[CORE] Lead salvo no Supabase: {company}")
+                            company = parts[0]
+                            # Ignora cabeçalhos comuns
+                            if company.lower() in ['imobiliária', 'empresa', 'nome', 'leads', 'alvo']: continue
+                            
+                            supabase.table('leads').insert({
+                                "company_name": company,
+                                "status": "Scraping / Identified",
+                                "source": "SDR Scan AI",
+                                "raw_data": {"full_info": clean_line, "agent": name}
+                            }).execute()
+                            found_count += 1
+                if found_count > 0:
+                    logger.info(f"✅ [CORE] {found_count} leads auto-salvos no Supabase.")
         except Exception as e:
             logger.error(f"[CORE] Falha ao auto-salvar lead: {e}")
 

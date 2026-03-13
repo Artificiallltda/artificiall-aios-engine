@@ -243,21 +243,29 @@ async def receive_generator_leads(request: Request, background_tasks: Background
                 supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY)
                 success_count = 0
                 for lead in leads:
-                    company = str(lead.get("nome", lead.get("company_name", "N/A")))
+                    # MAPEAMENTO FLEXÍVEL: Aceita vários nomes de campos
+                    company = str(lead.get("nome") or lead.get("company_name") or lead.get("company") or lead.get("razao_social") or "Empresa Desconhecida")
+                    website = str(lead.get("site") or lead.get("website") or lead.get("url") or "")
+                    phone = str(lead.get("telefone") or lead.get("phone") or lead.get("whatsapp") or "")
+                    address = str(lead.get("endereco") or lead.get("address") or lead.get("localizacao") or "")
+                    
                     db_lead = {
                         "company_name": company,
                         "status": "Scraping / Identified",
                         "source": str(source),
-                        "website": str(lead.get("site", lead.get("website", ""))),
-                        "phone": str(lead.get("telefone", lead.get("phone", ""))),
+                        "website": website,
+                        "phone": phone,
                         "email": str(lead.get("email", "")),
-                        "address": str(lead.get("endereco", lead.get("address", ""))),
+                        "address": address,
                         "rating": str(lead.get("rating", "0.0")),
                         "raw_data": lead
                     }
-                    supabase.table("leads").insert(db_lead).execute()
-                    success_count += 1
-                logger.info(f"✅ [SUPABASE] {success_count} leads salvos com sucesso!")
+                    
+                    res = supabase.table("leads").insert(db_lead).execute()
+                    if res.data:
+                        success_count += 1
+                
+                logger.info(f"✅ [SUPABASE] {success_count} leads salvos com sucesso no Pipeline!")
             except Exception as e:
                 logger.error(f"❌ [SUPABASE] Erro ao inserir leads: {e}")
 
