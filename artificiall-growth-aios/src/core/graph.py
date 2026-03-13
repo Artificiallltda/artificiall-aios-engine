@@ -31,6 +31,7 @@ from src.tools.database_tools import audit_supabase_security, audit_database_sch
 from src.tools.audio_generator import generate_audio
 from src.tools.rag_tools import query_knowledge_base, upload_document_to_knowledge_base
 from src.tools.excel_tools import create_excel, append_to_excel, read_excel
+from src.tools.lead_generator import run_lead_generator
 from src.core.capabilities import can_agent_generate, get_agent_for_file_type
 from src.core.agents.growth_analyst import arth_analyst_processor
 from src.config import settings
@@ -127,7 +128,7 @@ executor_agent = create_specialist_agent([
 
 # 5. SDR Agent (Prospecção)
 sdr_agent = create_specialist_agent(
-    [search_web, read_url, search_memory, save_memory, schedule_reminder], 
+    [run_lead_generator, search_web, read_url, search_memory, save_memory, schedule_reminder], 
     load_persona("arth-sdr-agent.md"), 
     deepseek_llm
 )
