@@ -44,9 +44,9 @@ class Settings(BaseSettings):
     META_API_VERSION: str = "v18.0"
     
     # --- DATABASE (SUPABASE/POSTGRES) ---
-    SUPABASE_DATABASE_URL: str = ""
+    SUPABASE_DATABASE_URL: str = os.getenv("SUPABASE_DATABASE_URL", "")
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
-    SUPABASE_SERVICE_KEY: str = os.getenv("SUPABASE_SERVICE_KEY", "")
+    SUPABASE_SERVICE_KEY: str = os.getenv("SUPABASE_SERVICE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
 
     # --- WEBHOOKS (DASHBOARD) ---
     VERCEL_WEBHOOK_URL: str = os.getenv("VERCEL_WEBHOOK_URL", "")

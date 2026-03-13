@@ -223,32 +223,42 @@ async def receive_generator_leads(request: Request, background_tasks: Background
         body = await request.json()
         leads = body.get("leads", [])
         source = body.get("source", "gerador_local")
+        
+        logger.info(f"📥 [WEBHOOK-LEADS] Recebidos {len(leads)} leads da fonte: {source}")
 
-        if not leads: return {"status": "ignored"}
+        if not leads: 
+            logger.warning("⚠️ [WEBHOOK-LEADS] Nenhum lead no corpo da requisição.")
+            return {"status": "ignored"}
 
         def process_and_insert_leads():
-            if not settings.SUPABASE_URL or not settings.SUPABASE_SERVICE_KEY or not create_client:
+            if not settings.SUPABASE_URL or not settings.SUPABASE_SERVICE_KEY:
+                logger.error("❌ [SUPABASE] Configurações ausentes (URL ou KEY).")
                 return
 
             try:
                 supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY)
+                success_count = 0
                 for lead in leads:
+                    company = str(lead.get("nome", lead.get("company_name", "N/A")))
                     db_lead = {
-                        "company_name": str(lead.get("nome", "N/A")),
+                        "company_name": company,
                         "status": "Scraping / Identified",
                         "source": str(source),
-                        "website": str(lead.get("site", "")),
-                        "phone": str(lead.get("telefone", "")),
+                        "website": str(lead.get("site", lead.get("website", ""))),
+                        "phone": str(lead.get("telefone", lead.get("phone", ""))),
                         "email": str(lead.get("email", "")),
-                        "address": str(lead.get("endereco", "")),
+                        "address": str(lead.get("endereco", lead.get("address", ""))),
                         "rating": str(lead.get("rating", "0.0")),
                         "raw_data": lead
                     }
                     supabase.table("leads").insert(db_lead).execute()
+                    success_count += 1
+                logger.info(f"✅ [SUPABASE] {success_count} leads salvos com sucesso!")
             except Exception as e:
-                logger.error(f"Erro Supabase: {e}")
+                logger.error(f"❌ [SUPABASE] Erro ao inserir leads: {e}")
 
         background_tasks.add_task(process_and_insert_leads)
         return {"status": "success", "criados": len(leads)}
     except Exception as e:
+        logger.error(f"❌ [WEBHOOK-LEADS] Erro crítico: {e}")
         return {"status": "error", "error": str(e)}
