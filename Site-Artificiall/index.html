@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARTIFICIALL — Ecossistema Premium de Inteligência Artificial</title>
+  <meta name="description" content="A Artificiall é o ecossistema premium de IA que reúne a plataforma multi-modelos, o assistente executivo Arth Executive e o agente gastronômico ChefIA. Inovação real para empresas e profissionais." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     MOBILE MENU
+══════════════════════════════════════════════════ -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#plataforma" class="nav-link" onclick="closeMobile()">Plataforma</a>
+  <a href="#arth-executive" class="nav-link arth" onclick="closeMobile()">Arth Executive</a>
+  <a href="#chefia" class="nav-link chefia" onclick="closeMobile()">ChefIA</a>
+  <a href="#planos" class="nav-link" onclick="closeMobile()">Planos</a>
+  <a href="#cta" class="btn btn-primary" style="margin-top:24px;" onclick="closeMobile()">Começar Agora</a>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+
+    <!-- Logo -->
+    <a href="#hero" class="nav-logo">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3L33 30H3L18 3Z" fill="none" stroke="#00a3ff" stroke-width="2.5"/>
+        <path d="M18 10L28 28H8L18 10Z" fill="rgba(0,163,255,0.2)" stroke="#00a3ff" stroke-width="1.5"/>
+        <circle cx="18" cy="19" r="4" fill="#00a3ff"/>
+      </svg>
+      ARTIFICIALL
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="nav-links">
+      <a href="#plataforma" class="nav-link">Plataforma</a>
+      <a href="#arth-executive" class="nav-link arth">Arth Executive</a>
+      <a href="#chefia" class="nav-link chefia">ChefIA</a>
+      <a href="#planos" class="nav-link">Planos</a>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="https://app.artificiallcorporate.org" class="btn btn-outline nav-cta" id="loginBtn" style="padding:10px 20px; font-size:14px;">
+        Login
+      </a>
+      <a href="#cta" class="btn btn-primary nav-cta" style="padding:10px 22px; font-size:14px;">
+        ▶ Começar Agora
+      </a>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="pulse"></span>
+      Ecossistema Premium de IA
+    </div>
+
+    <h1 class="hero-title">
+      <span class="line-1">O Futuro da IA</span>
+      <span class="line-2">já chegou ao Brasil</span>
+    </h1>
+
+    <p class="hero-sub">
+      Uma plataforma, múltiplos modelos e agentes autônomos especializados. Transforme sua empresa com a IA mais completa e acessível do mercado.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#planos" class="btn btn-primary" style="font-size:16px; padding:16px 32px;">
+        🚀 Ver Planos
+      </a>
+      <a href="#produtos" class="btn btn-outline" style="font-size:16px; padding:16px 32px;">
+        Conhecer Produtos
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-number">20+</div>
+        <div class="stat-label">Modelos de IA</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Produtos Premium</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Disponibilidade</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">R$730</div>
+        <div class="stat-label">Economia mensal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     PRODUTOS
+══════════════════════════════════════════════════ -->
+<section id="produtos">
+  <div class="container">
+
+    <div class="products-header reveal">
+      <div class="section-label cyan">✦ Nosso Ecossistema</div>
+      <h2 class="section-title">Três soluções, <span class="highlight-cyan">um só ecossistema</span></h2>
+      <p class="section-desc" style="margin:0 auto;">Da plataforma multi-modelos aos agentes especializados, temos a solução certa para cada desafio do seu negócio.</p>
+    </div>
+
+    <div class="products-grid">
+
+      <!-- Plataforma -->
+      <div class="product-card plataforma card reveal animate-delay-1">
+        <div class="product-icon cyan">🧠</div>
+        <span class="product-tag cyan">Plataforma</span>
+        <h3>Artificiall</h3>
+        <p>Acesso unificado a todos os modelos avançados do mercado — GPT, Claude, Gemini, Deepseek e mais — em uma única interface premium.</p>
+        <ul class="product-features">
+          <li class="product-feature"><span class="dot cyan"></span> GPT-5, Claude Opus 4.1, Gemini 3.0</li>
+          <li class="product-feature"><span class="dot cyan"></span> Geração de imagens e vídeos (VEO 3)</li>
+          <li class="product-feature"><span class="dot cyan"></span> Economia de até R$730/mês</li>
+          <li class="product-feature"><span class="dot cyan"></span> Suporte especializado</li>
+        </ul>
+        <a href="#planos" class="btn btn-primary" style="width:100%; justify-content:center;">Ver Planos →</a>
+      </div>
+
+      <!-- Arth Executive -->
+      <div class="product-card arth card reveal animate-delay-2">
+        <div class="product-icon purple">🤵</div>
+        <span class="product-tag purple">Agente IA</span>
+        <h3>Arth Executive</h3>
+        <p>Seu assistente executivo com inteligência artificial. Um sistema multi-agentes que orquestra tarefas, pesquisa, agenda e muito mais de forma autônoma.</p>
+        <ul class="product-features">
+          <li class="product-feature"><span class="dot purple"></span> Gerencia agenda e e-mails automaticamente</li>
+          <li class="product-feature"><span class="dot purple"></span> Pesquisa avançada e relatórios executivos</li>
+          <li class="product-feature"><span class="dot purple"></span> Integração com suas ferramentas</li>
+          <li class="product-feature"><span class="dot purple"></span> Multi-agentes (Orquestrador + Researcher)</li>
+        </ul>
+        <a href="#arth-executive" class="btn btn-purple" style="width:100%; justify-content:center;">Conhecer Arth →</a>
+      </div>
+
+      <!-- ChefIA -->
+      <div class="product-card chefia card reveal animate-delay-3">
+        <div class="product-icon amber">👨‍🍳</div>
+        <span class="product-tag amber">Agente IA</span>
+        <h3>ChefIA</h3>
+        <p>O chef de alta gastronomia que cabe no seu bolso. IA especializada que combina técnica francesa, nutrição funcional e Baker's Percentage para elevar su cozinha.</p>
+        <ul class="product-features">
+          <li class="product-feature"><span class="dot amber"></span> Precisão técnica com Baker's Percentage</li>
+          <li class="product-feature"><span class="dot amber"></span> Visão 360º: sabor + saúde + sustentabilidade</li>
+          <li class="product-feature"><span class="dot amber"></span> Fichas técnicas e cardápios profissionais</li>
+          <li class="product-feature"><span class="dot amber"></span> Mentoria educativa e Zero Waste</li>
+        </ul>
+        <a href="#chefia" class="btn btn-amber" style="width:100%; justify-content:center;">Conhecer ChefIA →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     PLATAFORMA
+══════════════════════════════════════════════════ -->
+<section id="plataforma">
+  <div class="container">
+    <div class="plataforma-layout">
+
+      <div class="reveal">
+        <div class="section-label cyan">🧠 Plataforma Artificiall</div>
+        <h2 class="section-title">Todos os modelos.<br><span class="highlight-cyan">Uma plataforma.</span></h2>
+        <p class="section-desc">Pare de pagar assinaturas separadas. Acesse GPT-5, Claude Opus, Gemini Deep Research, Perplexity, Midjourney e VEO 3 em um único lugar — por uma fração do custo.</p>
+
+        <div style="margin-top:40px; padding:24px; background:var(--bg-card); border:1px solid var(--border-cyan); border-radius:var(--radius-md);">
+          <p style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; font-weight:600; margin-bottom:12px;">💰 Comparativo de custo mensal</p>
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:14px; color:var(--text-secondary);">Assinaturas separadas</span>
+            <span style="font-size:14px; color:#ef4444; font-weight:700; text-decoration:line-through;">~R$ 930/mês</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="font-size:14px; color:var(--text-secondary);">Plano Pro Artificiall</span>
+            <span style="font-size:14px; color:#22c55e; font-weight:700;">~R$ 200/mês</span>
+          </div>
+          <div style="margin-top:16px; padding:12px; background:rgba(34,197,94,0.1); border-radius:var(--radius-sm); text-align:center;">
+            <span style="font-size:16px; font-weight:800; color:#22c55e;">✓ Economia de até R$730 por mês!</span>
+          </div>
+        </div>
+
+        <div style="margin-top:32px; display:flex; gap:16px; flex-wrap:wrap;">
+          <a href="#planos" class="btn btn-primary">Ver Planos</a>
+          <a href="https://app.artificiallcorporate.org" class="btn btn-outline">Acessar Plataforma</a>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="models-grid">
+          <div class="model-card"><div class="model-name">GPT-5</div><div class="model-desc">Modelo mais avançado da OpenAI para raciocínio complexo</div></div>
+          <div class="model-card"><div class="model-name">GPT o4 mini</div><div class="model-desc">Velocidade e eficiência para tarefas rápidas</div></div>
+          <div class="model-card"><div class="model-name">Claude Opus 4.1</div><div class="model-desc">Análise profunda e raciocínio avançado</div></div>
+          <div class="model-card"><div class="model-name">Claude Sonnet 4.5</div><div class="model-desc">Equilíbrio ideal entre inteligência e velocidade</div></div>
+          <div class="model-card"><div class="model-name">Gemini 3.0</div><div class="model-desc">Multimodal e multilingue de última geração</div></div>
+          <div class="model-card"><div class="model-name">Gemini Deep Research</div><div class="model-desc">Pesquisa profunda e análise de dados</div></div>
+          <div class="model-card"><div class="model-name">Perplexity</div><div class="model-desc">Busca na web com IA em tempo real</div></div>
+          <div class="model-card"><div class="model-name">Deepseek R1</div><div class="model-desc">Raciocínio e código de alta performance</div></div>
+          <div class="model-card"><div class="model-name">Midjourney</div><div class="model-desc">Geração de imagens de qualidade profissional</div></div>
+          <div class="model-card"><div class="model-name">VEO 3 & 3.1</div><div class="model-desc">Geração de vídeo com IA de última geração</div></div>
+          <div class="model-card"><div class="model-name">GPT Image</div><div class="model-desc">Geração e edição de imagens com GPT</div></div>
+          <div class="model-card"><div class="model-name">+ Muito mais</div><div class="model-desc">Nano Banana Pró, Freepik e outros</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     ARTH EXECUTIVE
+══════════════════════════════════════════════════ -->
+<section id="arth-executive">
+  <div class="container">
+    <div class="arth-layout">
+
+      <div class="reveal">
+        <div class="section-label purple">🤵 Arth Executive</div>
+        <h2 class="section-title">Seu executivo<br><span class="highlight-purple">de IA pessoal</span></h2>
+        <p class="section-desc">Não é só um chatbot. O Arth Executive é um sistema multi-agentes autônomo que orquestra pesquisas, organiza informações e executa tarefas complexas enquanto você foca no que importa.</p>
+
+        <div class="features-list">
+          <div class="feature-item reveal">
+            <div class="feature-icon purple">📅</div>
+            <div class="feature-text">
+              <h4>Gestão Executiva Completa</h4>
+              <p>Gerencia agendas, prioriza e-mails, prepara relatórios e organiza reuniões de forma autônoma e proativa.</p>
+            </div>
+          </div>
+          <div class="feature-item reveal animate-delay-1">
+            <div class="feature-icon purple">🔍</div>
+            <div class="feature-text">
+              <h4>Pesquisa Avançada</h4>
+              <p>O agente Researcher vasculha a internet e fontes especializadas para trazer inteligência de mercado atualizada.</p>
+            </div>
+          </div>
+          <div class="feature-item reveal animate-delay-2">
+            <div class="feature-icon purple">⚡</div>
+            <div class="feature-text">
+              <h4>Execução Multi-Agentes</h4>
+              <p>Orquestrador + Researcher atuam em paralelo para resolver problemas complexos em minutos, não horas.</p>
+            </div>
+          </div>
+          <div class="feature-item reveal animate-delay-3">
+            <div class="feature-icon purple">🔗</div>
+            <div class="feature-text">
+              <h4>Integração Nativa</h4>
+              <p>Conecta com suas ferramentas existentes (CRM, e-mail, calendário) via API para um fluxo de trabalho unificado.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:36px; display:flex; gap:16px; flex-wrap:wrap;">
+          <a href="#cta" class="btn btn-purple">Quero o Arth Executive</a>
+          <a href="#cta" class="btn btn-outline">Falar com Especialista</a>
+        </div>
+      </div>
+
+      <!-- Demo Panel -->
+      <div class="demo-panel float-anim reveal">
+        <div class="demo-header">
+          <div class="demo-dots">
+            <div class="demo-dot"></div>
+            <div class="demo-dot"></div>
+            <div class="demo-dot"></div>
+          </div>
+          <div class="demo-title">Arth Executive — Conversa em tempo real</div>
+        </div>
+
+        <div style="max-height:420px; overflow-y:auto; padding-right:4px;">
+
+          <div class="chat-label user-label">Você</div>
+          <div class="chat-bubble user">
+            Arth, me passa um resumo das minhas reuniões de amanhã e pesquisa os últimos relatórios de mercado sobre IA no Brasil.
+          </div>
+
+          <div style="height:16px;"></div>
+
+          <div class="chat-label arth-label">🤵 Arth Executive</div>
+          <div class="chat-bubble arth">
+            <strong style="color:var(--purple-light);">Claro!</strong> Acionando o agente Researcher agora...
+            <br><br>
+            📅 <strong>Amanhã você tem 3 reuniões:</strong><br>
+            — 09:00 · Sync com equipe de produto (45min)<br>
+            — 14:00 · Call com cliente Acme Corp (1h)<br>
+            — 17:30 · Review financeiro mensal (30min)
+            <br><br>
+            🔍 <strong>Relatório de Mercado IA no Brasil (2025):</strong><br>
+            O mercado de IA no Brasil cresceu 34% no último ano, com investimentos de R$2.8B. Os setores mais impactados são financeiro (28%) e varejo (22%)...
+            <br><br>
+            <span style="color:var(--text-muted); font-size:12px;">✓ Relatório completo gerado em PDF · Agenda sincronizada</span>
+          </div>
+
+          <div style="height:16px;"></div>
+
+          <div class="chat-label user-label">Você</div>
+          <div class="chat-bubble user">
+            Perfeito. Prepara um briefing executivo para a call da Acme Corp.
+          </div>
+
+          <div style="height:12px;"></div>
+
+          <div class="chat-label arth-label">🤵 Arth Executive</div>
+          <div class="chat-bubble arth">
+            <span style="color:var(--purple-light);">Processando...</span> Pesquisando histórico da Acme Corp, últimas interações e contexto do mercado deles.
+            <br><br>
+            <span style="color:var(--text-muted); font-size:12px;">⏱ Estimativa: 45 segundos · Agente Researcher ativo</span>
+          </div>
+
+          <div style="height:16px; display:flex; align-items:center; gap:8px; padding:12px 18px;">
+            <div style="display:flex; gap:4px;">
+              <span style="width:8px; height:8px; border-radius:50%; background:var(--purple-light); animation:pulse 1s infinite 0s;"></span>
+              <span style="width:8px; height:8px; border-radius:50%; background:var(--purple-light); animation:pulse 1s infinite 0.2s;"></span>
+              <span style="width:8px; height:8px; border-radius:50%; background:var(--purple-light); animation:pulse 1s infinite 0.4s;"></span>
+            </div>
+            <span style="font-size:13px; color:var(--text-muted);">Arth está pesquisando...</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHEFIA
+══════════════════════════════════════════════════ -->
+<section id="chefia">
+  <div class="container">
+
+    <div style="text-align:center; margin-bottom:60px;" class="reveal">
+      <div class="section-label amber">👨‍🍳 ChefIA</div>
+      <h2 class="section-title">Alta gastronomia,<br><span class="highlight-amber">inteligência artificial</span></h2>
+      <p class="section-desc" style="margin:0 auto;">Um agente multi-modelos especializado em gastronomia que une técnica francesa e italiana, nutrição funcional e precisão de Baker's Percentage para transformar sua cozinha em um laboratório de excelência.</p>
+    </div>
+
+    <div class="chefia-layout">
+
+      <!-- Pain Cards -->
+      <div>
+        <h3 style="font-size:20px; font-weight:700; margin-bottom:8px; color:var(--text-secondary);">As dores que o ChefIA resolve:</h3>
+        <div class="pain-cards reveal">
+          <div class="pain-card">
+            <div class="pain-emoji">😰</div>
+            <div class="pain-title">Medo do Erro</div>
+            <div class="pain-desc">"Meu pão solou", "meu bolo murchou"... O ChefIA analisa seu processo e elimina o achismo com precisão técnica.</div>
+          </div>
+          <div class="pain-card">
+            <div class="pain-emoji">🗑️</div>
+            <div class="pain-title">Desperdício Zero</div>
+            <div class="pain-desc">Cascas viram caldas, talos viram refogados. Aproveitamento total dos ingredientes — cozinha lucrativa e consciente.</div>
+          </div>
+          <div class="pain-card">
+            <div class="pain-emoji">🥗</div>
+            <div class="pain-title">Dieta vs. Prazer</div>
+            <div class="pain-desc">Alta gastronomia que cuida do corpo. Substitutos inteligentes (aquafaba, biomassa) sem abrir mão do sabor.</div>
+          </div>
+          <div class="pain-card">
+            <div class="pain-emoji">🍞</div>
+            <div class="pain-title">Fermentação Natural</div>
+            <div class="pain-desc">Domínio total do Levain e maturação a frio — pão artesanal perfeito encaixado na sua rotina corrida.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="reveal">
+        <div style="background:var(--bg-card); border:1px solid var(--border-amber); border-radius:var(--radius-xl); padding:40px; position:relative; overflow:hidden;">
+          <div style="position:absolute; top:-60px; right:-60px; width:250px; height:250px; border-radius:50%; background:radial-gradient(circle, var(--amber-dim), transparent 70%); pointer-events:none;"></div>
+
+          <h3 style="font-size:22px; font-weight:800; margin-bottom:28px; color:var(--amber-light);">✦ Qualidades do ChefIA</h3>
+
+          <div class="features-list">
+            <div class="feature-item">
+              <div class="feature-icon amber">📐</div>
+              <div class="feature-text">
+                <h4>Baker's Percentage</h4>
+                <p>Precisão de confeiteiro profissional. Ajuste a farinha e tudo se recalcula automaticamente.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon amber">🌿</div>
+              <div class="feature-text">
+                <h4>Visão 360º</h4>
+                <p>Alta gastronomia + nutrição funcional: baixo IG, gorduras boas, ingredientes inteligentes.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon amber">🎓</div>
+              <div class="feature-text">
+                <h4>Mentoria Educativa</h4>
+                <p>Aprenda o "porquê". Técnicas de autólise, branqueamento, fermentação — você nunca mais fica refém de uma receita.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon amber">⚡</div>
+              <div class="feature-text">
+                <h4>Agilidade Executiva</h4>
+                <p>Cardápios, fichas técnicas e treinamentos de equipe. Integrado com o Arth Executive para gerar PDFs e apresentações.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:32px;">
+            <a href="#cta" class="btn btn-amber" style="width:100%; justify-content:center;">Quero o ChefIA →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Ideal para -->
+    <div style="margin-top:80px; text-align:center;" class="reveal">
+      <p style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; margin-bottom:24px;">IDEAL PARA</p>
+      <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+        <span style="padding:10px 24px; border-radius:100px; border:1px solid var(--border-amber); background:var(--amber-dim); color:var(--amber-light); font-size:14px; font-weight:600;">👩‍🍳 Chefs Profissionais</span>
+        <span style="padding:10px 24px; border-radius:100px; border:1px solid var(--border-amber); background:var(--amber-dim); color:var(--amber-light); font-size:14px; font-weight:600;">🍰 Confeiteiros & Padeiros</span>
+        <span style="padding:10px 24px; border-radius:100px; border:1px solid var(--border-amber); background:var(--amber-dim); color:var(--amber-light); font-size:14px; font-weight:600;">🏪 Donos de Restaurantes</span>
+        <span style="padding:10px 24px; border-radius:100px; border:1px solid var(--border-amber); background:var(--amber-dim); color:var(--amber-light); font-size:14px; font-weight:600;">🌱 Nutricionistas</span>
+        <span style="padding:10px 24px; border-radius:100px; border:1px solid var(--border-amber); background:var(--amber-dim); color:var(--amber-light); font-size:14px; font-weight:600;">🏠 Cozinheiros Apaixonados</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     PLANOS
+══════════════════════════════════════════════════ -->
+<section id="planos">
+  <div class="container">
+
+    <div class="plans-header reveal">
+      <div class="section-label cyan">💎 Planos</div>
+      <h2 class="section-title">Escolha o plano <span class="highlight-cyan">ideal para você</span></h2>
+      <p class="section-desc" style="margin:0 auto;">Planos flexíveis que crescem com você. Todos incluem acesso à plataforma e suporte especializado.</p>
+    </div>
+
+    <div class="plans-grid">
+
+      <!-- Grátis -->
+      <div class="plan-card reveal">
+        <div class="plan-name">Grátis</div>
+        <div class="plan-tagline">Para experimentar</div>
+        <div class="plan-price-free">R$ 0</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features-list">
+          <li class="plan-feature"><span class="check">✓</span> GPT-4o</li>
+          <li class="plan-feature"><span class="check">✓</span> Claude Haiku</li>
+          <li class="plan-feature"><span class="check">✓</span> Deepseek</li>
+          <li class="plan-feature"><span class="check">✓</span> Geração de imagens (10/mês)</li>
+        </ul>
+        <a href="https://app.artificiallcorporate.org" class="btn btn-outline" style="width:100%; justify-content:center;">Começar Grátis</a>
+      </div>
+
+      <!-- Básico -->
+      <div class="plan-card reveal animate-delay-1">
+        <div class="plan-name">Básico</div>
+        <div class="plan-tagline">Ideal para começar</div>
+        <div class="plan-price">
+          <span class="currency">R$</span>
+          <span class="amount">97</span>
+          <span class="period">/mês</span>
+        </div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features-list">
+          <li class="plan-feature"><span class="check">✓</span> Midjourney — Imagens pro</li>
+          <li class="plan-feature"><span class="check">✓</span> Canva — Design premium</li>
+          <li class="plan-feature"><span class="check">✓</span> GPT-4o + Gemini Flash</li>
+          <li class="plan-feature"><span class="check">✓</span> Deepseek + Sonar</li>
+          <li class="plan-feature"><span class="check">✓</span> Claude Haiku 4.5</li>
+          <li class="plan-feature"><span class="check">✓</span> Suporte por e-mail</li>
+        </ul>
+        <a href="#cta" class="btn btn-outline" style="width:100%; justify-content:center;">Assinar Básico</a>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan-card featured reveal animate-delay-2">
+        <div class="plan-badge">⭐ Mais Popular</div>
+        <div class="plan-name">Premium</div>
+        <div class="plan-tagline">Para profissionais</div>
+        <div class="plan-price">
+          <span class="currency">R$</span>
+          <span class="amount">197</span>
+          <span class="period">/mês</span>
+        </div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features-list">
+          <li class="plan-feature"><span class="check" style="background:var(--cyan-dim); border-color:var(--border-cyan); color:var(--cyan);">✓</span> Tudo do Básico</li>
+          <li class="plan-feature"><span class="check" style="background:var(--cyan-dim); border-color:var(--border-cyan); color:var(--cyan);">✓</span> GPT Full (5, 5.1, 5.2, 4.1)</li>
+          <li class="plan-feature"><span class="check" style="background:var(--cyan-dim); border-color:var(--border-cyan); color:var(--cyan);">✓</span> Gemini 3.0 + Deep Research</li>
+          <li class="plan-feature"><span class="check" style="background:var(--cyan-dim); border-color:var(--border-cyan); color:var(--cyan);">✓</span> Claude Opus 4.1 + Sonnet 4.5</li>
+          <li class="plan-feature"><span class="check" style="background:var(--cyan-dim); border-color:var(--border-cyan); color:var(--cyan);">✓</span> Perplexity Completo</li>
+          <li class="plan-feature"><span class="check" style="background:var(--cyan-dim); border-color:var(--border-cyan); color:var(--cyan);">✓</span> Envato Freepik (BOT exclusivo)</li>
+          <li class="plan-feature"><span class="check" style="background:var(--cyan-dim); border-color:var(--border-cyan); color:var(--cyan);">✓</span> Suporte prioritário</li>
+        </ul>
+        <a href="#cta" class="btn btn-primary" style="width:100%; justify-content:center;">Assinar Premium</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="plan-card reveal animate-delay-3">
+        <div class="plan-name">Pro</div>
+        <div class="plan-tagline">Solução completa</div>
+        <div class="plan-price">
+          <span class="currency">R$</span>
+          <span class="amount">397</span>
+          <span class="period">/mês</span>
+        </div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features-list">
+          <li class="plan-feature"><span class="check">✓</span> Tudo do Premium</li>
+          <li class="plan-feature"><span class="check">✓</span> VEO 3 + VEO 3.1 (vídeos IA)</li>
+          <li class="plan-feature"><span class="check">✓</span> Todos os modelos avançados</li>
+          <li class="plan-feature"><span class="check">✓</span> GPT Image geração avançada</li>
+          <li class="plan-feature"><span class="check">✓</span> Nano Banana Pró</li>
+          <li class="plan-feature"><span class="check">✓</span> Suporte dedicado 24/7</li>
+        </ul>
+        <a href="#cta" class="btn btn-outline" style="width:100%; justify-content:center;">Assinar Pro</a>
+      </div>
+
+    </div>
+
+    <!-- Nota Agentes -->
+    <div class="reveal" style="margin-top:40px; max-width:700px; margin-left:auto; margin-right:auto;">
+      <div style="padding:24px 32px; background:rgba(124,58,237,0.08); border:1px solid var(--border-purple); border-radius:var(--radius-md); text-align:center;">
+        <p style="font-size:15px; color:var(--text-secondary);">
+          <strong style="color:var(--purple-light);">🤵 Arth Executive & 👨‍🍳 ChefIA</strong> são contratados separadamente com análise personalizada. <a href="#cta" style="color:var(--purple-light); font-weight:600;">Fale com um especialista →</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CTA FINAL
+══════════════════════════════════════════════════ -->
+<section id="cta">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <div class="cta-content reveal">
+      <div class="section-label cyan" style="margin-bottom:24px; display:inline-flex;">🚀 Comece Agora</div>
+      <h2 class="cta-title">
+        Pronto para transformar<br>
+        <span class="highlight-cyan">seu negócio com IA?</span>
+      </h2>
+      <p class="cta-desc">
+        Junte-se a centenas de empresas e profissionais que já usam a Artificiall para crescer mais rápido e com menos esforço.
+      </p>
+      <div class="cta-actions">
+        <a href="https://wa.me/5511999999999?text=Olá! Quero saber mais sobre os produtos da Artificiall." class="btn btn-whatsapp" style="font-size:16px; padding:16px 32px;">
+          💬 Falar no WhatsApp
+        </a>
+        <a href="https://app.artificiallcorporate.org" class="btn btn-primary" style="font-size:16px; padding:16px 32px;">
+          Acessar Plataforma →
+        </a>
+      </div>
+      <p style="margin-top:24px; font-size:13px; color:var(--text-muted);">✓ Sem contrato fixo &nbsp;·&nbsp; ✓ Cancel quando quiser &nbsp;·&nbsp; ✓ Suporte em português</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo" style="font-size:18px;">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:28px;">
+            <path d="M18 3L33 30H3L18 3Z" fill="none" stroke="#00a3ff" stroke-width="2.5"/>
+            <path d="M18 10L28 28H8L18 10Z" fill="rgba(0,163,255,0.2)" stroke="#00a3ff" stroke-width="1.5"/>
+            <circle cx="18" cy="19" r="4" fill="#00a3ff"/>
+          </svg>
+          ARTIFICIALL
+        </a>
+        <p>Ecossistema premium de inteligência artificial. Plataforma multi-modelos, agentes autônomos e soluções especializadas para empresas e profissionais.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Produto</h5>
+        <a href="#plataforma" class="footer-link">Plataforma</a>
+        <a href="#arth-executive" class="footer-link">Arth Executive</a>
+        <a href="#chefia" class="footer-link">ChefIA</a>
+        <a href="#planos" class="footer-link">Planos e Preços</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Empresa</h5>
+        <a href="https://artificiallcorporate.org" class="footer-link">Site Corporativo</a>
+        <a href="#cta" class="footer-link">Contato</a>
+        <a href="https://wa.me/5511999999999" class="footer-link">WhatsApp</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <a href="#" class="footer-link">Termos de Uso</a>
+        <a href="#" class="footer-link">Privacidade (LGPD)</a>
+        <a href="#" class="footer-link">Cookies</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Artificiall Ltda. Todos os direitos reservados.</span>
+      <span>Feito com ❤️ e IA no Brasil 🇧🇷</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
