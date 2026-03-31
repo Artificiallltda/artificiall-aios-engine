@@ -1,0 +1,9 @@
+active_ides:
+  - gemini
+  - claude
+  - qwen-code
+  - cursor
+  - codex
+
+squad_aliases:
+  arth-executive-squad-v1: ArthExecutive

@@ -1,0 +1,54 @@
+name: squad-artificiall-growth-v2
+version: 2.0.0
+description: Squad de elite para Growth Agentico 2026, focado em GEO, AEO e ACO para o ecossistema Artificiall.
+author: Gean / Artificiall
+license: MIT
+slashPrefix: growth
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - name: arth-geo-strategist.md
+      model: perplexity/sonar-pro
+    - name: arth-agentic-commerce-specialist.md
+      model: gemini-3.1-pro
+    - name: arth-aeo-content-architect.md
+      model: gpt-4o
+    - name: arth-e-eat-auditor.md
+      model: perplexity/sonar-pro
+    - name: arth-content-strategist.md
+      model: gpt-4o
+    - name: arth-creative-director.md
+      model: gemini-3.1-pro
+    - name: arth-campaign-manager.md
+      model: gpt-4o
+    - name: arth-sdr-agent.md
+      model: deepseek/deepseek-r1
+    - name: arth-closer.md
+      model: deepseek/deepseek-r1
+    - name: arth-performance-analyst.md
+      model: gpt-4o
+  tasks: []
+  workflows: []
+  checklists: []
+  templates: []
+  data:
+    - ai-reputation-dossier.md
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  memory_mode: continuous_shared
+  hitl_required: true
+
+tags:
+  - growth
+  - geo
+  - aeo
+  - aco
+  - b2b
+  - marketing

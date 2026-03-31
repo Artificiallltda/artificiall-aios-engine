@@ -1,0 +1,33 @@
+{
+  "name": "gerador-leads",
+  "version": "2.0.0",
+  "description": "Ferramenta de extração de leads multi-agente integrada ao AIOS",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test:maps": "node src/maps_scraper.js",
+    "test": "jest --testPathPattern=src/tests --forceExit"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  },
+  "keywords": [
+    "aios",
+    "lead-generation",
+    "scrapers"
+  ],
+  "author": "GeanAIOS Team",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "playwright": "^1.58.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
