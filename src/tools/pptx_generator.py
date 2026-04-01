@@ -1,5 +1,5 @@
 # 🛡️ SKILL BLINDADA (08/03/2026) - NÃO ALTERAR LÓGICA DE DESIGN OU IMAGENS
-# Esta skill foi homologada com design Premium Manus AI e resiliência de tags.
+# Esta skill foi homologada com design Premium Artificiall Growth e resiliência de tags.
 # Qualquer modificação em layouts, cores ou busca de imagens deve ser evitada.
 import os
 import json
@@ -13,13 +13,13 @@ from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
 from src.config import settings
-from tools.image_generator import generate_image
+from src.tools.image_generator import generate_image
 from typing import Any, Union
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
 
-# ─── Manus Executive Design System ──────────────────────────────────────────
+# ─── Artificiall Growth Design System ───────────────────────────────────────
 # Paleta: Dark Navy + Cobalt Blue — limpo, profissional, moderno
 _BG     = RGBColor(10,  12,  16)   # Quase preto profundo
 _CARD   = RGBColor(28,  33,  40)   # Cinza azulado escuro para elementos
@@ -100,7 +100,7 @@ def _build_cover(prs, title, subtitle=""):
 
     # Footer decorativo
     _text(slide, Inches(0.8), _H - Inches(0.6), Inches(8), Inches(0.4),
-          "EXECUTIVE STRATEGY DECK  ·  MANUS AI PRO", 10, color=_MUTED)
+          "GROWTH STRATEGY DECK  ·  ARTIFICIALL GROWTH", 10, color=_MUTED)
 
 
 def _build_content(prs, title, bullets, img_path=None):
@@ -183,7 +183,7 @@ class PpptxSchema(BaseModel):
 @tool(args_schema=PpptxSchema)
 async def generate_pptx(slides_content_json: Any) -> str:
     """
-    Gera apresentação executiva premium com design Manus AI (Navy + Cobalt Blue, Calibri).
+    Gera apresentação executiva premium com design Artificiall Growth (Navy + Cobalt Blue, Calibri).
     Aceita string JSON, Dict (ideal) com 'presentation_title' e 'slides', ou Lista de strings.
     """
     if slides_content_json is None:
@@ -197,7 +197,7 @@ async def generate_pptx(slides_content_json: Any) -> str:
         # ==================================================================
         # NORMALIZAÇÃO DE PARÂMETROS
         # ==================================================================
-        prs_title = "EXECUTIVE DECK"
+        prs_title = "GROWTH DECK"
         prs_subtitle = ""
         slides_data = []
 
@@ -238,7 +238,7 @@ async def generate_pptx(slides_content_json: Any) -> str:
             slides_data = [{"title": "Sem Dados Estruturados", "bullets": ["O agente não enviou informações estruturadas adequadas."]}]
 
         # ==================================================================
-        # GERAÇÃO PREMIUM (REMASTERIZADA MANUS AI)
+        # GERAÇÃO PREMIUM (REMASTERIZADA ARTIFICIALL GROWTH)
         # ==================================================================
         prs = Presentation()
         prs.slide_width = _W
@@ -266,7 +266,7 @@ async def generate_pptx(slides_content_json: Any) -> str:
                         bullets[b_idx] = re.sub(r'<SEND_FILE:[^>]+>', '', str(bullet)).strip()
                         break
             
-            # --- AUTO-GERAÇÃO MANUS AI (Fallback) ---
+            # --- AUTO-GERAÇÃO ARTIFICIALL GROWTH (Fallback) ---
             # Se a IA principal esqueceu de passar a imagem para o PPTX, criamos uma na hora!
             if not img_path and i < 8: # Limitamos a 8 slides automáticos para não travar a API
                 try:

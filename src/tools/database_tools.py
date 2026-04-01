@@ -1,5 +1,5 @@
 from langchain_core.tools import tool
-from utils.supabase_utils import run_rls_audit, run_schema_audit
+from src.utils.supabase_utils import run_rls_audit, run_schema_audit
 from src.config import settings
 
 @tool
